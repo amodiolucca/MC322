@@ -1,6 +1,7 @@
-package com.amodio.lab2;
+package com.amodio.lab2; //Pacote com.amodio.lab2
 
 public class Veiculo {
+	//Declaração dos atributos
 	private String placa;
 	private String marca;
 	private String modelo;
@@ -35,5 +36,10 @@ public class Veiculo {
 	
 	public void setModelo (String modelo) {
 		this.modelo = modelo;
+	}
+
+	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
+	public String toString() {
+		return "Veiculo [Placa = " + placa + ", Marca = " + marca + ", Modelo = " + modelo + "]";
 	}
 }

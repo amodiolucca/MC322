@@ -1,6 +1,7 @@
-package com.amodio.lab2;
+package com.amodio.lab2; //Pacote com.amodio.lab2
 
 public class Sinistro {
+	//Declaração dos atributos
 	private int id;
 	private String data;
 	private String endereco;
@@ -32,10 +33,18 @@ public class Sinistro {
 		this .endereco = endereco ;
 	}
 	
-//funções
+//Métodos gerais
+	
+	/**
+	 * Método que gera um ID aleatório para o Sinistro
+	 * @return ID (int)
+	 */
 	public int gera_id() {
-		return (int)Math.floor(Math.random() * (1001));
+		return (int)Math.floor(Math.random() * (1001)); //Gera um ID aleatório de 0 a 1000
+	}
+	
+	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
+	public String toString() {
+		return "Sinistro [ID = " + id + ", Data = " + data + ", Endereço = " + endereco + "]";
 	}
 }
-
-
