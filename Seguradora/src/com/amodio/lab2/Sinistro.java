@@ -23,6 +23,8 @@ public class Sinistro {
 	public String getEndereco () {
 		return endereco ;
 	}
+	//Implementação de um Setter para o ID, para caso a seguradora queira dar destaque a um sinistro em específico, atribuindo-lhe um ID específico.
+	//Esse sinistro espec estaria com um ID aleatório anteriormente
 	public void setId ( int id ) {
 		this . id = id ;
 	}
