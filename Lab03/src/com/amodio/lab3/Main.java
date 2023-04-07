@@ -32,8 +32,8 @@ public class Main { //Início da classe main
 		System.out.println("####### Teste dos clientes #######"); //Separador para o teste dos clientes
 		
 		//Criação de 2 clientes aleatórios
-		Cliente joao = new Cliente("João","444.444.444-44","10/08/1993",25,"Avenida Paulista 456"); //João tem CPF inválido
-		Cliente vitor = new Cliente ("Vítor","204.011.938-88","26/09/2002",19,"Avenida Heitor Penteado 432");
+		Cliente joao = new Cliente("João", "Avenida Francisco Glicério 3732","2023-04-03", "Superior Completo", "Masculino","Classe B");
+		Cliente vitor = new Cliente ("Vítor", "Avenida Francisco Glicério 3732","2023-03-01", "Superior Completo", "Masculino","Classe B");
 		
 		if(joao.getNome() == null) { //Se o CPF for inválido, todas os atributos do objeto ficam como null
 			System.out.println("CPF inválido");
