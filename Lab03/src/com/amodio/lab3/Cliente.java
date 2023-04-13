@@ -2,7 +2,7 @@ package com.amodio.lab3; //Pacote com.amodio.lab3
 
 import java.text.ParseException; //pode usar?
 import java.text.SimpleDateFormat;  
-import java.util.Date;  
+import java.util.*;
 
 public class Cliente {
 	// Declaração dos atributos
@@ -12,7 +12,8 @@ public class Cliente {
 	private String educacao;
 	private String genero;
 	private String classeEconomica;
-
+	private LinkedList <Veiculo> listaVeiculos;
+	
 	// Construtor
 	public Cliente(String nome, String endereco,String dataLicenca, String educacao,String genero, String classeEconomica) {
 		this.nome= nome;
@@ -21,6 +22,7 @@ public class Cliente {
 		this.educacao = educacao;
 		this.genero = genero;
 		this.classeEconomica = classeEconomica;
+		this.listaVeiculos = new LinkedList<>();
 	}
 
 	// Getters e Setters
@@ -49,6 +51,10 @@ public class Cliente {
 		return classeEconomica;
 	}
 	
+	public LinkedList<Veiculo> getListaVeiculos() {
+		return listaVeiculos;
+	}
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -75,6 +81,22 @@ public class Cliente {
 
 	// Métodos gerais
 	
+	protected boolean cadastraVeiculo (Veiculo veiculo) {
+		if(listaVeiculos.contains(veiculo)==false) {
+			listaVeiculos.add(veiculo);
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean removeVeiculo (String veiculo) { //nao tem q considerar 2 veiculos do mesmo modelo?
+		if(listaVeiculos.contains(veiculo)) { //verificar a partir de string
+			listaVeiculos.remove(veiculo);
+			return true;
+		}
+		return false;
+	}
+	
 	protected Date parseDate(String data) { //verificar se pode ser protected pra usar no PF
 		try {
 			Date data_modificada= new SimpleDateFormat("yyyy-MM-dd").parse(data);
@@ -89,7 +111,6 @@ public class Cliente {
 		return "Cliente [nome=" + nome + ", endereco=" + endereco + ", dataLicenca=" + dataLicenca + ", educacao="
 				+ educacao + ", genero=" + genero + ", classeEconomica=" + classeEconomica + "]";
 	}
-	
 	
 
 }

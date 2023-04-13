@@ -5,13 +5,19 @@ public class Sinistro {
 	private int id;
 	private String data;
 	private String endereco;
+	private Seguradora seguradora;
+	private Cliente cliente;
+	private Veiculo veiculo;
 
 
 //Construtor
-	public Sinistro(String data, String endereco) {
+	public Sinistro(String data, String endereco, Seguradora seguradora, Cliente cliente, Veiculo veiculo) {
 		this.data = data;
 		this.endereco = endereco;
 		this.id = gera_id();
+		this.seguradora = seguradora;
+		this.cliente = cliente;
+		this.veiculo = veiculo;
 	}
 //Getters e Setters
 	public int getId () {
@@ -22,6 +28,18 @@ public class Sinistro {
 	}
 	public String getEndereco () {
 		return endereco ;
+	}
+	
+	public Seguradora getSeguradora() {
+		return seguradora;
+	}
+	
+	public Cliente getCliente() {
+		return cliente;
+	}
+	
+	public Veiculo getVeiculo() {
+		return veiculo;
 	}
 	//Implementação de um Setter para o ID, para caso a seguradora queira dar destaque a um sinistro em específico, atribuindo-lhe um ID específico.
 	//Esse sinistro espec estaria com um ID aleatório anteriormente
@@ -35,7 +53,18 @@ public class Sinistro {
 		this .endereco = endereco ;
 	}
 	
-//Métodos gerais
+	public void setSeguradora ( Seguradora seguradora ) {
+		this .seguradora = seguradora ;
+	}
+	
+	public void setCliente ( Cliente cliente ) {
+		this.cliente = cliente ;
+	}
+
+	public void setVeiculo ( Veiculo veiculo ) {
+		this .veiculo = veiculo ;
+	}
+	//Métodos gerais
 	
 	/**
 	 * Método que gera um ID aleatório para o Sinistro
