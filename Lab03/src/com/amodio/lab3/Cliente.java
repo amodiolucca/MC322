@@ -89,7 +89,7 @@ public class Cliente {
 		return false;
 	}
 	
-	protected boolean removeVeiculo (String veiculo) { //nao tem q considerar 2 veiculos do mesmo modelo?
+	protected boolean removeVeiculo (Veiculo veiculo) { //nao tem q considerar 2 veiculos do mesmo modelo?
 		if(listaVeiculos.contains(veiculo)) { //verificar a partir de string
 			listaVeiculos.remove(veiculo);
 			return true;

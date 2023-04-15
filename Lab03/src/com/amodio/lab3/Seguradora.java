@@ -17,6 +17,9 @@ public class Seguradora {
 		this . telefone = telefone ;
 		this . email = email ;
 		this . endereco = endereco ;
+		this.listaSinistros = new ArrayList<>();
+		this.listaClientes = new LinkedList<>();
+		
 	}
 
 // Getters e setters
@@ -60,10 +63,48 @@ public class Seguradora {
 		this . endereco = endereco ;
 	}
 	
-	//public boolean cadastrarCliente(Cliente cliente) { //tem q usar o try?
-		
-	//}
+	public boolean cadastrarCliente(Cliente cliente) { //tem q usar o try?
+		if (listaClientes.contains(cliente)==false) {
+			if(cliente instanceof ClientePF && ((ClientePF) cliente).getCpf()!=null) {
+				listaClientes.add(cliente);
+				return true;
+			}
+			if(cliente instanceof ClientePJ && ((ClientePJ) cliente).getCnpj()!=null) {
+				listaClientes.add(cliente);
+				return true;
+			}
+		}
+		return false;
+	}
 	
+	public boolean removerCliente(Cliente cliente) {
+		if(listaClientes.contains(cliente)) {
+			listaClientes.remove(cliente);
+			return true;
+		}
+		return false;
+	}
+	
+	public LinkedList<Cliente> listarClientes(String cliente){
+		LinkedList<Cliente> lista= new LinkedList<>();
+		if(cliente == "ClientePJ") {
+			for(Cliente c:listaClientes) {
+				if (c instanceof ClientePJ){
+					lista.add(c);
+				}
+			}
+		} else if(cliente == "ClientePF") {
+			for(Cliente c:listaClientes) {
+				if (c instanceof ClientePF){
+					lista.add(c);
+				}
+			}
+		} else {
+			return null; //se retornar null, o usuário digitou incorretamente, e na main deve ter uma impressão o alertando sobre
+		}
+		
+		return lista;
+	}
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
 	public String toString() {
 		return "Seguradora [Nome = " + nome + ", Telefone = " + telefone + ", E-mail = " 

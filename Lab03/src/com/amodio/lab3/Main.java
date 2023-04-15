@@ -18,8 +18,14 @@ public class Main { //Início da classe main
 		
 		samsung.cadastraVeiculo(focus);
 		System.out.println(samsung.getListaVeiculos());
-		System.out.println(samsung.getListaVeiculos());
+		Seguradora seguradora = new Seguradora ("Porto Seguro", "32569878", "portoseguro@gmail.com","Avenida Paulista 100");
+		System.out.println(seguradora);
+		seguradora.cadastrarCliente(samsung);
+		System.out.println(seguradora.getListaClientes());
+		LinkedList<Cliente> lista = seguradora.listarClientes("ClientePJ");
+		System.out.println(lista);
 		
+		/*
 		 Scanner scan = new Scanner(System.in);
          System.out.println("Digite um veículo: ");
          String veiculo = scan.next();
@@ -29,5 +35,6 @@ public class Main { //Início da classe main
          int idade = scan.nextInt();
          scan.close();
          System.out.println("A idade digitada foi " + idade);
+	*/
 	} //Fim do método main
 } //Fim da classe main
