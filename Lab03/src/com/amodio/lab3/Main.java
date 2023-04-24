@@ -145,38 +145,38 @@ public class Main { //Início da classe main
 		
 		//Implementação do método de leitura de dados
 		Scanner scan = new Scanner(System.in);
-        System.out.println("Escolha alguma das opções de visualização abaixo:");
+        	System.out.println("Escolha alguma das opções de visualização abaixo:");
 		System.out.println("Para listar os sinistros da seguradora, digite 1.");
-        System.out.println("Para listar os clientes PF da seguradora, digite 2.");
-        System.out.println("Para listar os clientes PJ, digite 3.");
-        System.out.println("Para listar os sinistros de João, digite 4.");
-        System.out.println("Para listar os sinistros de Samsung, digite 5.");
-        System.out.println("Digite sua entrada:");
-        String entrada = scan.next(); //faz a leitura
-         
-        if(entrada.equals("1")) { //se entrada for 1
-        	seguradora.listarSinistros(); //lista os sinistros
-        } else if(entrada.equals("2")) { //se entrada for 2
-        	listaPF = seguradora.listarClientes("ClientePF"); //lista os clientes PF
-     		seguradora.imprime_listaCliente(listaPF);
-        }else if(entrada.equals("3")){ //se entrada for 3
-        	listaPJ = seguradora.listarClientes("ClientePJ"); //lista os clientes PJ
-      		seguradora.imprime_listaCliente(listaPJ);
-        }else if(entrada.equals("4")) { //se entrada for 4
-        	 sinistros_joao = seguradora.visualizarSinistro("João"); //visualiza os sinistros de João
-     		if (sinistros_joao == false) {
-     			System.out.println("João não possui sinistros");
-     		}
-        } else if(entrada.equals("5")) { //se entrada for 5
-        	 sinistros_samsung = seguradora.visualizarSinistro("Samsung"); //visualiza sinistros de Samsung
-     		if (sinistros_samsung == false) {
-     			System.out.println("Samsung não possui sinistros");
-     		}
-        } else { //se não for nenhuma das opções, mensagem de erro
-        	 System.out.println("Entrada inválida");
-        }
-      		
-        scan.close(); //fecha o scan
+		System.out.println("Para listar os clientes PF da seguradora, digite 2.");
+		System.out.println("Para listar os clientes PJ, digite 3.");
+		System.out.println("Para listar os sinistros de João, digite 4.");
+		System.out.println("Para listar os sinistros de Samsung, digite 5.");
+		System.out.println("Digite sua entrada:");
+		String entrada = scan.next(); //faz a leitura
+
+		if(entrada.equals("1")) { //se entrada for 1
+			seguradora.listarSinistros(); //lista os sinistros
+		} else if(entrada.equals("2")) { //se entrada for 2
+			listaPF = seguradora.listarClientes("ClientePF"); //lista os clientes PF
+			seguradora.imprime_listaCliente(listaPF);
+		}else if(entrada.equals("3")){ //se entrada for 3
+			listaPJ = seguradora.listarClientes("ClientePJ"); //lista os clientes PJ
+			seguradora.imprime_listaCliente(listaPJ);
+		}else if(entrada.equals("4")) { //se entrada for 4
+			 sinistros_joao = seguradora.visualizarSinistro("João"); //visualiza os sinistros de João
+			if (sinistros_joao == false) {
+				System.out.println("João não possui sinistros");
+			}
+		} else if(entrada.equals("5")) { //se entrada for 5
+			 sinistros_samsung = seguradora.visualizarSinistro("Samsung"); //visualiza sinistros de Samsung
+			if (sinistros_samsung == false) {
+				System.out.println("Samsung não possui sinistros");
+			}
+		} else { //se não for nenhuma das opções, mensagem de erro
+			 System.out.println("Entrada inválida");
+		}
+
+		scan.close(); //fecha o scan
 
 	} //Fim do método main
 } //Fim da classe main
