@@ -1,53 +1,91 @@
 package com.amodio.lab3; //Pacote com.amodio.lab3
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class ClientePF extends Cliente {
-	private String cpf ;
+	//Declaração dos atributos
+	private final String cpf ;
 	private Date dataNascimento ;
-	//verificar se pode receber a data como string
+	private String genero;
+	private Date dataLicenca;
+	private String educacao;
+	private String classeEconomica;
+	
+	//Construtor
 	public ClientePF ( String nome , String endereco , String dataLicenca ,
 			String educacao , String genero , String classeEconomica ,
-			List < Veiculo > listaVeiculos , String cpf , String dataNascimento ) {
+			String cpf , String dataNascimento ) {
 			// chama o construtor da superclasse
-			super (nome , endereco , dataLicenca , educacao , genero , classeEconomica); //colocar a lista aq depois
+			super (nome , endereco);
 			if(validarCPF(cpf)) {
 				this . cpf = cpf ;
 				this . dataNascimento = parseDate(dataNascimento) ;
+				this.dataLicenca = parseDate(dataLicenca);
+				this.educacao = educacao;
+				this.genero = genero;
+				this.classeEconomica = classeEconomica;
 			} else {
 				this.cpf = null; //antes de adicionar o cliente nas listas, verificar se esse campo é null
 			}
 	}
 
 	//Getters e Setters
-		public String getCpf() {
-			return cpf;
-		}
+	public String getCpf() {
+		return cpf;
+	}
 		
-		public Date getDataNascimento () {
-			return dataNascimento;
-		}
+	public Date getDataNascimento () {
+		return dataNascimento;
+	}
 	
-		public void setCpf(String cpf) {
-			if(validarCPF(cpf)) {
-				this.cpf = cpf;
-			} else {
-				this.cpf = null;
-			}
-		}
+	public Date getDataLicenca() {
+		return dataLicenca;
+	}
 		
-		public void setDataNascimento(String dataNascimento) {
-			this.dataNascimento = parseDate(dataNascimento);
-		}
+	public String getEducacao() {
+		return educacao;
+	}
+		
+	public String getGenero() {
+		return genero;
+	}
+		
+	public String getclasseEconomica() {
+		return classeEconomica;
+	}
+		
+	public void setDataLincenca(String dataLicenca) {
+		this.dataLicenca = parseDate(dataLicenca);
+	}
+		
+	public void setEducacao(String educacao) {
+		this.educacao = educacao;
+	}
+		
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+		
+	public void setClasseEconomica(String classeEconomica) {
+		this.classeEconomica = classeEconomica;
+	}
+		
+	public void setDataNascimento(String dataNascimento) {
+		this.dataNascimento = parseDate(dataNascimento);
+	}
+		
+	//Métodos gerais
+		
 	/**
 	 * Método que verifica se o Cadastro de Pessoa Física informado é válido de
 	 * acordo com as restrições
 	 * 
 	 * @param cpf (String)
-	 * @return True ou False
+	 * @return boolean
 	 */
-	private boolean validarCPF(String cpf) {
+	public static boolean validarCPF(String cpf) { //public pois precisamos chamar na main
 		char primeiro_caractere, caractere; // Declaração das variáveis
 		int digito_1, digito_2; // Declaração das variáveis
 		primeiro_caractere = cpf.charAt(0); // Pega o primeiro caractere da string CPF
@@ -86,7 +124,7 @@ public class ClientePF extends Cliente {
 	 * @param cpf (String)
 	 * @return digito_1 (int)
 	 */
-	private int calcula_digito1(String cpf) {
+	private static int calcula_digito1(String cpf) {
 		int algarismo, soma = 0; // Declaração das variáveis
 		char caractere; // Declaração das variáveis
 		for (int j = 0; j < 9; j++) {
@@ -111,7 +149,7 @@ public class ClientePF extends Cliente {
 	 * @param digito1 (int)
 	 * @return digito2 (int)
 	 */
-	private int calcula_digito2(String cpf, int digito1) {
+	private static int calcula_digito2(String cpf, int digito1) {
 		int algarismo, soma = 0; // Declaração das variáveis
 		char caractere; // Declaração das variáveis
 		for (int k = 0; k < 9; k++) {
@@ -129,5 +167,22 @@ public class ClientePF extends Cliente {
 			return (11 - (soma % 11)); // Caso contrário, é 11 subtraído do resto da divisão por 11
 		}
 	}
-
+	/**
+	 * Método que converte uma String de data para o tipo Date
+	 * @param data
+	 * @return Date com a data de interesse formatada
+	 */
+	private Date parseDate(String data) { 
+		try {
+			Date data_modificada= new SimpleDateFormat("yyyy-MM-dd").parse(data);
+			return data_modificada;
+		} catch(ParseException e){
+			return null;
+		}
+	}
+	@Override
+	public String toString() {
+		return "ClientePF [Nome: " + this.getNome() + ", Endereço: " + this.getEndereco() + ", CPF:  " + cpf + ", Data de Nascimento: " + dataNascimento + ", Gênero: " + genero + ", Data de Licença: "
+	+ dataLicenca + ", Educação: " + educacao + ", Classe Econômica: " + classeEconomica + "]";
+	}	
 }

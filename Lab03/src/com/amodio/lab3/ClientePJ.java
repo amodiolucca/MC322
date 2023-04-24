@@ -1,15 +1,16 @@
 package com.amodio.lab3; //Pacote com.amodio.lab3
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ClientePJ extends Cliente {
-	private String cnpj;
+	private final String cnpj;
 	private Date dataFundacao;
-	//verificar se pode receber a data como string
-	public ClientePJ ( String nome , String endereco , String dataLicenca ,
-			String educacao , String genero , String classeEconomica , String cnpj , String dataFundacao ) { //colocar lista nos parametros
+	
+	public ClientePJ ( String nome , String endereco , String cnpj , String dataFundacao ) {
 			// chama o construtor da superclasse
-			super (nome , endereco , dataLicenca , educacao , genero , classeEconomica); //colocar a lista aq depois
+			super (nome , endereco);
 			if(validarCNPJ(cnpj)) {
 				this . cnpj = cnpj ;
 				this . dataFundacao = parseDate(dataFundacao) ;
@@ -26,60 +27,66 @@ public class ClientePJ extends Cliente {
 		public Date getDataFundacao () {
 			return dataFundacao;
 		}
-	
-		
-		public void setCnpj(String cnpj) {
-			if(validarCNPJ(cnpj)) {
-				this.cnpj = cnpj;
-			} else {
-				this.cnpj = null;
-			}
-		}
 		
 		public void setDataNascimento(String dataNascimento) {
 			this.dataFundacao = parseDate(dataNascimento);
 		}
 		
-		private boolean validarCNPJ(String cnpj) {
+		
+	//Métodos gerais
+		
+		/**
+		 * Método que verifica se determinado CNPJ é válido
+		 * @param cnpj (String)
+		 * @return boolean
+		 */
+		public static boolean validarCNPJ(String cnpj) { //public pois precisamos chamar na main
 			char primeiro_caractere, caractere; // Declaração das variáveis
 			int digito_1, digito_2; // Declaração das variáveis
-			primeiro_caractere = cnpj.charAt(0); // Pega o primeiro caractere da string CPF
-			cnpj = cnpj.replaceAll("[^0-9]", ""); // Deixa o CPF apenas com algarismos
-			if (cnpj.length() != 14) { // Se o tamanho do CPF for diferente de 11, é inválido
+			primeiro_caractere = cnpj.charAt(0); // Pega o primeiro caractere da string CNPJ
+			cnpj = cnpj.replaceAll("[^0-9]", ""); // Deixa o CNPJ apenas com algarismos
+			if (cnpj.length() != 14) { // Se o tamanho do CNPJ for diferente de 11, é inválido
 				return false;
 			}
-			for (int i = 1; i < 14; i++) { // Verifica se todos os algarismos são iguais. Se forem, o CPF é inválido
+			for (int i = 1; i < 14; i++) { // Verifica se todos os algarismos são iguais. Se forem, o CNPJ é inválido
 				caractere = cnpj.charAt(i); // Pega 1 caractere por iteração
 				if (caractere != primeiro_caractere) { // Compara esse caractere com o primeiro, e se forem diferentes, sai
 														// do laço
 					break;
 				}
 				if (i == 13) { // Se chegar no último algarismo e não tiver saído do laço, todos os algasrismos
-								// são iguais, e portanto, o CPF é inválido
+								// são iguais, e portanto, o CNPJ é inválido
 					return false;
 				}
 			}
-			digito_1 = calcula_digito1(cnpj); // Obtém o primeiro dígito verificador do CPF a partir da função
-			digito_2 = calcula_digito2(cnpj, digito_1); // Obtém o segundo dígito verificador do CPF a partir da função
+			digito_1 = calcula_digito1(cnpj); // Obtém o primeiro dígito verificador do CNPJ a partir da função
+			digito_2 = calcula_digito2(cnpj, digito_1); // Obtém o segundo dígito verificador do CNPJ a partir da função
 			if (digito_1 == Character.getNumericValue(cnpj.charAt(12))
-					&& digito_2 == Character.getNumericValue(cnpj.charAt(13))) { // Verifica se os 2 dígitos verificadores correspondem aos dígitos do CPF. Se forem, o CPF é válido
+					&& digito_2 == Character.getNumericValue(cnpj.charAt(13))) { // Verifica se os 2 dígitos verificadores correspondem aos dígitos do CNPJ. Se forem, o CNPJ é válido
 				return true;
 			}
-			return false; // Se a condição acima não for satisfeita, o CPF é inválido
+			return false; // Se a condição acima não for satisfeita, o CNPJ é inválido
 		}
-		private int calcula_digito1(String cnpj) {
+		
+		/**
+		 * Método que calcula o primeiro dígito verificador esperado para o CNPJ
+		 * @param cnpj (String)
+		 * @return digito1 (int)
+		 */
+		
+		private static int calcula_digito1(String cnpj) {
 			int algarismo, soma = 0; // Declaração das variáveis
 			char caractere; // Declaração das variáveis
 			for (int j = 0; j < 4; j++) {
-				caractere = cnpj.charAt(j); // Pega 1 algarismo por iteração a partir do primeiro do CPF
+				caractere = cnpj.charAt(j); // Pega 1 algarismo por iteração a partir do primeiro do CNPJ
 				algarismo = Character.getNumericValue(caractere); // Converte para int para as operações matemáticas
-				soma += algarismo * (5 - j); // Multiplica o algarismo por 10 subtraído de sua posição no CPF e adiciona o valor na variável acumuladora
+				soma += algarismo * (5 - j); // Multiplica o algarismo por 5 subtraído de sua posição no CPF e adiciona o valor na variável acumuladora
 			}
 			
 			for (int k = 0; k < 8; k++) {
-				caractere = cnpj.charAt(k+4); // Pega 1 algarismo por iteração a partir do primeiro do CPF
+				caractere = cnpj.charAt(k+4); // Pega 1 algarismo por iteração a partir do primeiro do CNPJ
 				algarismo = Character.getNumericValue(caractere); // Converte para int para as operações matemáticas
-				soma += algarismo * (9 - k); // Multiplica o algarismo por 10 subtraído de sua posição no CPF e adiciona o valor na variável acumuladora
+				soma += algarismo * (9 - k); // Multiplica o algarismo por 9 subtraído de sua posição no CPF e adiciona o valor na variável acumuladora
 			}
 			
 			if (soma % 11 < 2) { // Se o resto da divisão da acumuladora por 11 for menor que 2, o primeiro algarismo verificador é 0
@@ -89,7 +96,14 @@ public class ClientePJ extends Cliente {
 			}
 		}
 		
-		private int calcula_digito2(String cpf, int digito1) {
+		/**
+		 * Método que calcula o segundo dígito verificador esperado para o CNPJ
+		 * @param cpf (String)
+		 * @param digito1 (int)
+		 * @return digito2 (int)
+		 */
+		
+		private static int calcula_digito2(String cpf, int digito1) {
 			int algarismo, soma = 0; // Declaração das variáveis
 			char caractere; // Declaração das variáveis
 			for (int j = 0; j < 5; j++) {
@@ -111,10 +125,23 @@ public class ClientePJ extends Cliente {
 				return (11 - (soma % 11)); // Caso contrário, é 11 subtraído do resto da divisão por 11
 			}
 		}
-
+		
+		/**
+		 * Método que converte uma String de data para o tipo Date
+		 * @param data (String)
+		 * @return data_modificada (Date com a data de interesse formatada)
+		 */
+		private Date parseDate(String data) {
+			try {
+				Date data_modificada= new SimpleDateFormat("yyyy-MM-dd").parse(data);
+				return data_modificada;
+			} catch(ParseException e){
+				return null;
+			}
+		}
 		@Override
 		public String toString() {
-			return "ClientePJ [cnpj=" + cnpj + ", dataFundacao=" + dataFundacao + this.getNome();
+			return "ClientePJ [Nome: " + this.getNome() + ", Endereço: " + this.getEndereco() + ", CNPJ: " + cnpj + ", Data de Fundação: " + dataFundacao + "]";
 		}
 
 		

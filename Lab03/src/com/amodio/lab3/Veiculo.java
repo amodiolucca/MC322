@@ -47,6 +47,6 @@ public class Veiculo {
 
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
 	public String toString() {
-		return "Veiculo [Placa = " + placa + ", Marca = " + marca + ", Modelo = " + modelo + "]";
+		return "Veiculo [Placa:  " + placa + ", Marca:  " + marca + ", Modelo:  " + modelo + "]";
 	}
 }

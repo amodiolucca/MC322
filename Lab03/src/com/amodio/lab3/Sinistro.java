@@ -1,9 +1,13 @@
 package com.amodio.lab3; //Pacote com.amodio.lab3
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Sinistro {
 	//Declaração dos atributos
 	private int id;
-	private String data;
+	private Date data;
 	private String endereco;
 	private Seguradora seguradora;
 	private Cliente cliente;
@@ -12,7 +16,7 @@ public class Sinistro {
 
 //Construtor
 	public Sinistro(String data, String endereco, Seguradora seguradora, Cliente cliente, Veiculo veiculo) {
-		this.data = data;
+		this.data = parseDate(data);
 		this.endereco = endereco;
 		this.id = gera_id();
 		this.seguradora = seguradora;
@@ -23,7 +27,7 @@ public class Sinistro {
 	public int getId () {
 		return id ;
 	}
-	public String getData () {
+	public Date getData () {
 		return data ;
 	}
 	public String getEndereco () {
@@ -47,7 +51,7 @@ public class Sinistro {
 		this . id = id ;
 	}
 	public void setData ( String data ) {
-		this . data = data ;
+		this . data = parseDate(data) ;
 	}
 	public void setEndereco ( String endereco ) {
 		this .endereco = endereco ;
@@ -64,6 +68,7 @@ public class Sinistro {
 	public void setVeiculo ( Veiculo veiculo ) {
 		this .veiculo = veiculo ;
 	}
+	
 	//Métodos gerais
 	
 	/**
@@ -74,8 +79,26 @@ public class Sinistro {
 		return (int)Math.floor(Math.random() * (1001)); //Gera um ID aleatório de 0 a 1000
 	}
 	
+	/**
+	 * Método que converte uma String de data para o tipo Date
+	 * @param data
+	 * @return data_modificada (Date com a data de interesse formatada)
+	 */
+	private Date parseDate(String data) {
+		try {
+			Date data_modificada= new SimpleDateFormat("yyyy-MM-dd").parse(data);
+			return data_modificada;
+		} catch(ParseException e){
+			return null;
+		}
+	}
+	
+	
+	@Override
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
 	public String toString() {
-		return "Sinistro [ID = " + id + ", Data = " + data + ", Endereço = " + endereco + "]";
+		return "Sinistro [ID: " + id + ", Data:  " + data + ", Endereço: " + endereco + ", " + seguradora
+				+ ", " + cliente + ", " + veiculo + "]";
 	}
+	
 }

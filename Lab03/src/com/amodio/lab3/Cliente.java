@@ -1,28 +1,18 @@
 package com.amodio.lab3; //Pacote com.amodio.lab3
-
-import java.text.ParseException; //pode usar?
-import java.text.SimpleDateFormat;  
+ 
 import java.util.*;
 
 public class Cliente {
 	// Declaração dos atributos
 	private String nome;
 	private String endereco;
-	private Date dataLicenca;
-	private String educacao;
-	private String genero;
-	private String classeEconomica;
 	private LinkedList <Veiculo> listaVeiculos;
 	
 	// Construtor
-	public Cliente(String nome, String endereco,String dataLicenca, String educacao,String genero, String classeEconomica) {
+	public Cliente(String nome, String endereco) {
 		this.nome= nome;
 		this.endereco = endereco;
-		this.dataLicenca = parseDate(dataLicenca);
-		this.educacao = educacao;
-		this.genero = genero;
-		this.classeEconomica = classeEconomica;
-		this.listaVeiculos = new LinkedList<>();
+		this.listaVeiculos = new LinkedList<>(); //LinkedList, pois faz a inserção de elementos de forma maia rápida
 	}
 
 	// Getters e Setters
@@ -35,21 +25,6 @@ public class Cliente {
 		return endereco;
 	}
 
-	public Date getDataLicenca() {
-		return dataLicenca;
-	}
-	
-	public String getEducacao() {
-		return educacao;
-	}
-	
-	public String getGenero() {
-		return genero;
-	}
-	
-	public String getclasseEconomica() {
-		return classeEconomica;
-	}
 	
 	public LinkedList<Veiculo> getListaVeiculos() {
 		return listaVeiculos;
@@ -63,54 +38,49 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 	
-	public void setDataLincenca(String dataLicenca) {
-		this.dataLicenca = parseDate(dataLicenca);
-	}
-	
-	public void setEducacao(String educacao) {
-		this.educacao = educacao;
-	}
-	
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
-	
-	public void setClasseEconomica(String classeEconomica) {
-		this.classeEconomica = classeEconomica;
-	}
 
 	// Métodos gerais
 	
-	protected boolean cadastraVeiculo (Veiculo veiculo) {
-		if(listaVeiculos.contains(veiculo)==false) {
-			listaVeiculos.add(veiculo);
+	/**
+	 * Método que cadastra os veículos do cliente e retorna false caso o veículo já esteja cadastrado
+	 * @param veiculo (Veiculo)
+	 * @return boolean
+	 */
+	public boolean cadastraVeiculo (Veiculo veiculo) {
+		if(listaVeiculos.contains(veiculo)==false) { //se não estiver na lista
+			listaVeiculos.add(veiculo); //adiciona na lista
 			return true;
 		}
 		return false;
 	}
 	
-	protected boolean removeVeiculo (Veiculo veiculo) { //nao tem q considerar 2 veiculos do mesmo modelo?
-		if(listaVeiculos.contains(veiculo)) { //verificar a partir de string
-			listaVeiculos.remove(veiculo);
+	/**
+	 * Método que remove veículos do cliente, desde que estejam na lista anteriormente
+	 * @param veiculo (Veiculo)
+	 * @return boolean
+	 */
+	public boolean removeVeiculo (Veiculo veiculo) { 
+		if(listaVeiculos.contains(veiculo)) { //se estiver na lista
+			listaVeiculos.remove(veiculo); //remove
 			return true;
 		}
 		return false;
 	}
 	
-	protected Date parseDate(String data) { //verificar se pode ser protected pra usar no PF
-		try {
-			Date data_modificada= new SimpleDateFormat("yyyy-MM-dd").parse(data);
-			return data_modificada;
-		} catch(ParseException e){
-			return null;
+	/**
+	 * Método que imprime a lista de veículos de maneira organizada
+	 * @param lista (LinkedList<Veiculo>)
+	 */
+	public void imprimeListaVeiculos(LinkedList<Veiculo> lista) {
+		for(Veiculo v:lista) {
+			System.out.println(v);
 		}
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Cliente [nome=" + nome + ", endereco=" + endereco + ", dataLicenca=" + dataLicenca + ", educacao="
-				+ educacao + ", genero=" + genero + ", classeEconomica=" + classeEconomica + "]";
+		return "Cliente [Nome: " + nome + ", Endereço: " + endereco + "]";
 	}
-	
+
 
 }
