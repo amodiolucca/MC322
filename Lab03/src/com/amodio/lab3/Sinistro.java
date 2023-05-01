@@ -45,6 +45,7 @@ public class Sinistro {
 	}
 	//Implementação de um Setter para o ID, para caso a seguradora queira dar destaque a um sinistro em específico, atribuindo-lhe um ID específico.
 	//Esse sinistro espec estaria com um ID aleatório anteriormente
+	//O novo ID deve ser um valor fora do range convencional e apenas temporário, para não causar conflito
 	public void setId ( int id ) {
 		this . id = id ;
 	}

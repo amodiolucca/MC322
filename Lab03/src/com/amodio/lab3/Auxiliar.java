@@ -8,7 +8,7 @@ public class Auxiliar {
 	
 	/**
 	 * Método que converte uma String de data para o tipo Date
-	 * @param data
+	 * @param data (String)
 	 * @return Date com a data de interesse formatada
 	 */
 	public static Date parseDate(String data) { 

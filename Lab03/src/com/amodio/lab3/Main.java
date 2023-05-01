@@ -17,8 +17,8 @@ public class Main { //Início da classe main
 		ClientePJ google = new ClientePJ ("Google", "Avenida Brasil 222", "15.202.005/0001-74", "1950-06-11"); //Cliente adicional que apenas será adicionado e removido da seguradora
 		ClientePF joao = new ClientePF("João", "Avenida 9 de Julho 281", "2023-02-17", "Médio Completo", "Masculino", "Classe B","427.638.700-07", "2004-07-11");
 		ClientePF maria = new ClientePF ("Maria", "Avenida Norte Sul 111", "2023-01-15", "Superior completo", "Feminino", "Classe A", "111.111.111-11", "1985-02-13"); //CPF inválido, apenas para testar
-		Veiculo focus = new Veiculo("5632", "Ford", "Focus");
-		Veiculo civic = new Veiculo ("6974", "Honda", "Civic");
+		Veiculo focus = new Veiculo("5632", "Ford", "Focus", 2013);
+		Veiculo civic = new Veiculo ("6974", "Honda", "Civic", 2022);
 		Seguradora seguradora = new Seguradora ("Porto Seguro", "32569878", "portoseguro@gmail.com","Avenida Paulista 100");
 		
 		//Teste dos CPFs e CNPJs
@@ -118,17 +118,17 @@ public class Main { //Início da classe main
 		//visualização dos sinistros:
 		System.out.println("Sinistros da seguradora:");
 		seguradora.listarSinistros();
-		System.out.println("Visualizando os sinistos de João: ");
+		System.out.println("Visualizando os sinistros de João: ");
 		sinistros_joao = seguradora.visualizarSinistro("João"); //A impressão dos sinistros ocorre no método
 		if (!sinistros_joao) { //se retorna false, não há sinistros nesse nome
 			System.out.println("João não possui sinistros");
 		}
-		System.out.println("Visualizando os sinistos de Samsung: ");
+		System.out.println("Visualizando os sinistros de Samsung: ");
 		sinistros_samsung = seguradora.visualizarSinistro("Samsung");
 		if (!sinistros_samsung) {
 			System.out.println("Samsung não possui sinistros");
 		}
-		System.out.println("Visualizando os sinistos da Google: ");
+		System.out.println("Visualizando os sinistros da Google: ");
 		sinistros_google = seguradora.visualizarSinistro("Google");
 		if (!sinistros_google) {
 			System.out.println("Google não possui sinistros"); //deve imprimir isso, pois não há sinistro cadastrado para a Google

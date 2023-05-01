@@ -43,7 +43,7 @@ public class ClientePJ extends Cliente {
 		int digito_1, digito_2; // Declaração das variáveis
 		primeiro_caractere = cnpj.charAt(0); // Pega o primeiro caractere da string CNPJ
 		cnpj = cnpj.replaceAll("[^0-9]", ""); // Deixa o CNPJ apenas com algarismos
-		if (cnpj.length() != 14) { // Se o tamanho do CNPJ for diferente de 11, é inválido
+		if (cnpj.length() != 14) { // Se o tamanho do CNPJ for diferente de 14, é inválido
 			return false;
 		}
 		for (int i = 1; i < 14; i++) { // Verifica se todos os algarismos são iguais. Se forem, o CNPJ é inválido
@@ -78,13 +78,13 @@ public class ClientePJ extends Cliente {
 		for (int j = 0; j < 4; j++) {
 			caractere = cnpj.charAt(j); // Pega 1 algarismo por iteração a partir do primeiro do CNPJ
 			algarismo = Character.getNumericValue(caractere); // Converte para int para as operações matemáticas
-			soma += algarismo * (5 - j); // Multiplica o algarismo por 5 subtraído de sua posição no CPF e adiciona o valor na variável acumuladora
+			soma += algarismo * (5 - j); // Multiplica o algarismo por 5 subtraído de sua posição no CNPJ e adiciona o valor na variável acumuladora
 		}
 
 		for (int k = 0; k < 8; k++) {
 			caractere = cnpj.charAt(k+4); // Pega 1 algarismo por iteração a partir do primeiro do CNPJ
 			algarismo = Character.getNumericValue(caractere); // Converte para int para as operações matemáticas
-			soma += algarismo * (9 - k); // Multiplica o algarismo por 9 subtraído de sua posição no CPF e adiciona o valor na variável acumuladora
+			soma += algarismo * (9 - k); // Multiplica o algarismo por 9 subtraído de sua posição no CNPJ e adiciona o valor na variável acumuladora
 		}
 
 		if (soma % 11 < 2) { // Se o resto da divisão da acumuladora por 11 for menor que 2, o primeiro algarismo verificador é 0
@@ -96,21 +96,21 @@ public class ClientePJ extends Cliente {
 
 	/**
 	 * Método que calcula o segundo dígito verificador esperado para o CNPJ
-	 * @param cpf (String)
+	 * @param cnpj (String)
 	 * @param digito1 (int)
 	 * @return digito2 (int)
 	 */
 
-	private static int calcula_digito2(String cpf, int digito1) {
+	private static int calcula_digito2(String cnpj, int digito1) {
 		int algarismo, soma = 0; // Declaração das variáveis
 		char caractere; // Declaração das variáveis
 		for (int j = 0; j < 5; j++) {
-			caractere = cpf.charAt(j);
+			caractere = cnpj.charAt(j);
 			algarismo = Character.getNumericValue(caractere); // Converte para int para as operações matemáticas
 			soma += algarismo * (6 - j);
 		}
 		for (int k = 0; k < 7; k++) {
-			caractere = cpf.charAt(k+5);
+			caractere = cnpj.charAt(k+5);
 			algarismo = Character.getNumericValue(caractere); // Converte para int para as operações matemáticas
 			soma += algarismo * (9 - k);
 		}

@@ -174,9 +174,8 @@ public class Seguradora {
 		}
 		if(variavel_indicadora ==1) { //se indicadora for 1
 			return true; //retorna true
-		} else {
-			return false;
-		}
+		} 
+		return false;
 	}
 	
 	/**
@@ -207,6 +206,7 @@ public class Seguradora {
 	}
 	
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
+	@Override
 	public String toString() {
 		return "Seguradora [Nome:  " + nome + ", Telefone:  " + telefone + ", E-mail:  " 
 		+ email + ", Endereço:  " + endereco+ "]";
