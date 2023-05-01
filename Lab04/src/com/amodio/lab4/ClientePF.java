@@ -1,6 +1,10 @@
-package com.amodio.lab3; //Pacote com.amodio.lab3
+package com.amodio.lab4; //Pacote com.amodio.lab4
 
+import java.time.Period;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class ClientePF extends Cliente {
 	//Declaração dos atributos
@@ -75,7 +79,21 @@ public class ClientePF extends Cliente {
 	}
 		
 	//Métodos gerais
-		
+	
+/**
+	public Double calculaScore() {
+		 
+	}
+	
+	private int calcula_idade() {
+		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
+		Calendar calendario = Calendar.getInstance(localHorario);
+		Date data_atual = calendario.getTime();
+		long diferenca = data_atual.getTime() - dataNascimento.getTime();
+		//long diferenca_dias = TimeUnit.DAYS.convert(diferenca, TimeUnit.MILLISECONDS);
+		return  (int) (diferenca / (1000 * 60 * 60 * 24 * ));
+	}
+	**/
 	/**
 	 * Método que verifica se o Cadastro de Pessoa Física informado é válido de
 	 * acordo com as restrições

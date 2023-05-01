@@ -12,7 +12,7 @@ public class Cliente {
 	public Cliente(String nome, String endereco) {
 		this.nome= nome;
 		this.endereco = endereco;
-		this.listaVeiculos = new LinkedList<>(); //LinkedList, pois faz a inserção de elementos de forma maia rápida
+		this.listaVeiculos = new LinkedList<>(); //LinkedList, pois faz a inserção de elementos de forma maia rápida. Ideal para esse caso
 	}
 
 	// Getters e Setters
@@ -47,7 +47,7 @@ public class Cliente {
 	 * @return boolean
 	 */
 	public boolean cadastraVeiculo (Veiculo veiculo) {
-		if(listaVeiculos.contains(veiculo)==false) { //se não estiver na lista
+		if(!listaVeiculos.contains(veiculo)) { //se não estiver na lista
 			listaVeiculos.add(veiculo); //adiciona na lista
 			return true;
 		}

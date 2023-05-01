@@ -1,4 +1,4 @@
-package com.amodio.lab3; //Pacote com.amodio.lab3
+package com.amodio.lab4; //Pacote com.amodio.lab4
 
 import java.util.*;
 

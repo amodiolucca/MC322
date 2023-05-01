@@ -22,29 +22,29 @@ public class Main { //Início da classe main
 		Seguradora seguradora = new Seguradora ("Porto Seguro", "32569878", "portoseguro@gmail.com","Avenida Paulista 100");
 		
 		//Teste dos CPFs e CNPJs
-		if(ClientePJ.validarCNPJ(samsung.getCnpj()) == true) {
+		if(ClientePJ.validarCNPJ(samsung.getCnpj())) {
 			System.out.println("O CNPJ da Samsung é válido");
 		} else {
 			System.out.println("O CNPJ da Samsung é inválido");
 		}
 		
-		if(ClientePJ.validarCNPJ("22.222.222/2222-22") == true) { //passando a string do CNPJ, pois o campo CNPJ do objeto apple é null por ser inválido
+		if(ClientePJ.validarCNPJ("22.222.222/2222-22")) { //passando a string do CNPJ, pois o campo CNPJ do objeto apple é null por ser inválido
 			System.out.println("O CNPJ da Apple é válido");
 		} else {
 			System.out.println("O CNPJ da Apple é inválido");
 		}
-		if(ClientePJ.validarCNPJ(google.getCnpj()) == true) {
+		if(ClientePJ.validarCNPJ(google.getCnpj())) {
 			System.out.println("O CNPJ da Google é válido");
 		} else {
 			System.out.println("O CNPJ da Google é inválido");
 		}
-		if(ClientePF.validarCPF(joao.getCpf()) == true) {
+		if(ClientePF.validarCPF(joao.getCpf())) {
 			System.out.println("O CPF do João é válido");
 		} else {
 			System.out.println("O CPF do João é inválido");
 		}
 		
-		if(ClientePF.validarCPF("111.111.111-11") == true) { //passando a string do CPF, pois o campo CPF do objeto maria é null por ser inválido
+		if(ClientePF.validarCPF("111.111.111-11")) { //passando a string do CPF, pois o campo CPF do objeto maria é null por ser inválido
 			System.out.println("O CPF da Maria é válido");
 		} else {
 			System.out.println("O CPF da Maria é inválido");
@@ -69,23 +69,23 @@ public class Main { //Início da classe main
 		System.out.println(google);
 		
 		//Cadastros de veículos e clientes
-		if(samsung.cadastraVeiculo(focus)==false) {
+		if(!samsung.cadastraVeiculo(focus)) {
 			System.out.println("Veículo já cadastrado");
 		}
-		if(joao.cadastraVeiculo(civic)==false){
+		if(!joao.cadastraVeiculo(civic)){
 			System.out.println("Veículo já cadastrado");
 		}
-		if(seguradora.cadastrarCliente(samsung)==false){
+		if(!seguradora.cadastrarCliente(samsung)){
 			System.out.println("Cliente já cadastrado ou cliente inválido");
 		}
-		if(seguradora.cadastrarCliente(joao)==false) {
+		if(!seguradora.cadastrarCliente(joao)) {
 			System.out.println("Cliente já cadastrado ou cliente inválido");
 		}
 		System.out.println("Tentando cadastrar Maria:");
-		if(seguradora.cadastrarCliente(maria)==false) { //Tem que dar mensagem de erro ao cadastrar, pois CPF é null
+		if(!seguradora.cadastrarCliente(maria)) { //Tem que dar mensagem de erro ao cadastrar, pois CPF é null
 			System.out.println("Cliente já cadastrado ou cliente inválido");
 		}
-		if(seguradora.cadastrarCliente(google)==false) {
+		if(!seguradora.cadastrarCliente(google)) {
 			System.out.println("Cliente já cadastrado ou cliente inválido");
 		}
 		//Imprimindo a lista de veículos de Samsung e João
@@ -108,10 +108,10 @@ public class Main { //Início da classe main
 		
 		//Gerando sinistros
 		
-		if(seguradora.gerarSinistro("2022-08-09", "Avenida Paulista 272", seguradora, joao, civic)==false) {
+		if(!seguradora.gerarSinistro("2022-08-09", "Avenida Paulista 272", seguradora, joao, civic)) {
 			System.out.println("Erro ao gerar o sinistro: Verifique se o cliente é da seguradora");
 		}
-		if(seguradora.gerarSinistro("2021-07-24", "Avenida Carlos Grimaldi 210", seguradora, samsung, focus)==false) {
+		if(!seguradora.gerarSinistro("2021-07-24", "Avenida Carlos Grimaldi 210", seguradora, samsung, focus)) {
 			System.out.println("Erro ao gerar o sinistro: Verifique se o cliente é da seguradora");
 		}
 		
@@ -120,17 +120,17 @@ public class Main { //Início da classe main
 		seguradora.listarSinistros();
 		System.out.println("Visualizando os sinistos de João: ");
 		sinistros_joao = seguradora.visualizarSinistro("João"); //A impressão dos sinistros ocorre no método
-		if (sinistros_joao == false) { //se retorna false, não há sinistros nesse nome
+		if (!sinistros_joao) { //se retorna false, não há sinistros nesse nome
 			System.out.println("João não possui sinistros");
 		}
 		System.out.println("Visualizando os sinistos de Samsung: ");
 		sinistros_samsung = seguradora.visualizarSinistro("Samsung");
-		if (sinistros_samsung == false) {
+		if (!sinistros_samsung) {
 			System.out.println("Samsung não possui sinistros");
 		}
 		System.out.println("Visualizando os sinistos da Google: ");
 		sinistros_google = seguradora.visualizarSinistro("Google");
-		if (sinistros_google == false) {
+		if (!sinistros_google) {
 			System.out.println("Google não possui sinistros"); //deve imprimir isso, pois não há sinistro cadastrado para a Google
 		}
 		
@@ -164,12 +164,12 @@ public class Main { //Início da classe main
 			seguradora.imprime_listaCliente(listaPJ);
 		}else if(entrada.equals("4")) { //se entrada for 4
 			 sinistros_joao = seguradora.visualizarSinistro("João"); //visualiza os sinistros de João
-			if (sinistros_joao == false) {
+			if (!sinistros_joao) {
 				System.out.println("João não possui sinistros");
 			}
 		} else if(entrada.equals("5")) { //se entrada for 5
 			 sinistros_samsung = seguradora.visualizarSinistro("Samsung"); //visualiza sinistros de Samsung
-			if (sinistros_samsung == false) {
+			if (!sinistros_samsung) {
 				System.out.println("Samsung não possui sinistros");
 			}
 		} else { //se não for nenhuma das opções, mensagem de erro

@@ -1,7 +1,5 @@
 package com.amodio.lab3; //Pacote com.amodio.lab3
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Sinistro {
@@ -16,7 +14,7 @@ public class Sinistro {
 
 //Construtor
 	public Sinistro(String data, String endereco, Seguradora seguradora, Cliente cliente, Veiculo veiculo) {
-		this.data = parseDate(data);
+		this.data = Auxiliar.parseDate(data);
 		this.endereco = endereco;
 		this.id = gera_id();
 		this.seguradora = seguradora;
@@ -51,7 +49,7 @@ public class Sinistro {
 		this . id = id ;
 	}
 	public void setData ( String data ) {
-		this . data = parseDate(data) ;
+		this . data = Auxiliar.parseDate(data) ;
 	}
 	public void setEndereco ( String endereco ) {
 		this .endereco = endereco ;
@@ -77,20 +75,6 @@ public class Sinistro {
 	 */
 	public int gera_id() {
 		return (int)Math.floor(Math.random() * (1001)); //Gera um ID aleatório de 0 a 1000
-	}
-	
-	/**
-	 * Método que converte uma String de data para o tipo Date
-	 * @param data
-	 * @return data_modificada (Date com a data de interesse formatada)
-	 */
-	private Date parseDate(String data) {
-		try {
-			Date data_modificada= new SimpleDateFormat("yyyy-MM-dd").parse(data);
-			return data_modificada;
-		} catch(ParseException e){
-			return null;
-		}
 	}
 	
 	

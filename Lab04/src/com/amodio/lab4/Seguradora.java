@@ -1,4 +1,4 @@
-package com.amodio.lab3; //Pacote com.amodio.lab3
+package com.amodio.lab4; //Pacote com.amodio.lab4
 
 import java.util.*;
 
@@ -9,8 +9,8 @@ public class Seguradora {
 	private String telefone ;
 	private String email ;
 	private String endereco ;
-	LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida. Ideal para esse caso
-	ArrayList <Sinistro> listaSinistros; //ArrayList, pois há a busca mais rápida. Ideal para esse caso
+	LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida
+	ArrayList <Sinistro> listaSinistros; //ArrayList, pois há a busca mais rápida
 
  // Construtor
 	public Seguradora ( String nome , String telefone , String email , String endereco ) {
@@ -164,8 +164,6 @@ public class Seguradora {
 	
 	public boolean visualizarSinistro(String cliente) {
 		int variavel_indicadora = 0; //variável indicadora que representa se o cliente possui ou não sinistro
-		//Necessidade de usar uma indicadora ao invés de retornar true dentro do if, pois o mesmo cliente pode ter
-		//mais de um sinistro
 		for(Sinistro sinistro: listaSinistros) { //para cada sinistro
 			if(sinistro.getCliente().getNome().equals(cliente)) { //se o cliente do sinistro for o cliente buscado
 				System.out.println(sinistro); //imprime o sinistro
