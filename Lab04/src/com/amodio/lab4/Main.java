@@ -12,15 +12,15 @@ public class Main { //Início da classe main
 		boolean sinistros_samsung;
 		boolean sinistros_google;
 		//Instanciação dos objetos
-		ClientePJ samsung = new ClientePJ("Samsung", "Avenida do Estado 221", "38.320.036/0001-25", "1975-08-06");
-		ClientePJ apple = new ClientePJ("Apple", "Avenida Paulista 123", "22.222.222/2222-22", "1965-02-03"); //CNPJ inválido, apenas para testar
-		ClientePJ google = new ClientePJ ("Google", "Avenida Brasil 222", "15.202.005/0001-74", "1950-06-11"); //Cliente adicional que apenas será adicionado e removido da seguradora
-		ClientePF joao = new ClientePF("João", "Avenida 9 de Julho 281", "2023-02-17", "Médio Completo", "Masculino", "Classe B","427.638.700-07", "2004-07-11");
+		ClientePJ samsung = new ClientePJ("Samsung", "Avenida do Estado 221", "38.320.036/0001-25", "1975-08-06",100);
+		ClientePJ apple = new ClientePJ("Apple", "Avenida Paulista 123", "22.222.222/2222-22", "1965-02-03",500); //CNPJ inválido, apenas para testar
+		ClientePJ google = new ClientePJ ("Google", "Avenida Brasil 222", "15.202.005/0001-74", "1950-06-11", 700); //Cliente adicional que apenas será adicionado e removido da seguradora
+		ClientePF joao = new ClientePF("João", "Avenida 9 de Julho 281", "2023-02-17", "Médio Completo", "Masculino", "Classe B","427.638.700-07", "2003-04-11");
 		ClientePF maria = new ClientePF ("Maria", "Avenida Norte Sul 111", "2023-01-15", "Superior completo", "Feminino", "Classe A", "111.111.111-11", "1985-02-13"); //CPF inválido, apenas para testar
-		Veiculo focus = new Veiculo("5632", "Ford", "Focus");
-		Veiculo civic = new Veiculo ("6974", "Honda", "Civic");
+		Veiculo focus = new Veiculo("5632", "Ford", "Focus",2010);
+		Veiculo civic = new Veiculo ("6974", "Honda", "Civic",2021);
 		Seguradora seguradora = new Seguradora ("Porto Seguro", "32569878", "portoseguro@gmail.com","Avenida Paulista 100");
-		
+		Seguradora.adicionaSeguradora(seguradora);
 		//Teste dos CPFs e CNPJs
 		if(ClientePJ.validarCNPJ(samsung.getCnpj())) {
 			System.out.println("O CNPJ da Samsung é válido");
@@ -133,16 +133,14 @@ public class Main { //Início da classe main
 		if (!sinistros_google) {
 			System.out.println("Google não possui sinistros"); //deve imprimir isso, pois não há sinistro cadastrado para a Google
 		}
-		
 		//Removendo Google da seguradora
-		
 		seguradora.removerCliente("Google");
 		System.out.println("Todos os clientes da seguradora após remover Google:");
 		seguradora.imprime_listaCliente(seguradora.getListaClientes()); //Google não aparece mais na lista de Clientes
 		listaPJ = seguradora.listarClientes("ClientePJ");
 		System.out.println("Clientes PJ da seguradora:");
 		seguradora.imprime_listaCliente(listaPJ);//Google não aparece mais na lista de Clientes PJ
-		
+		/*
 		//Implementação do método de leitura de dados
 		Scanner scan = new Scanner(System.in);
         	System.out.println("Escolha alguma das opções de visualização abaixo:");
@@ -177,7 +175,13 @@ public class Main { //Início da classe main
 		}
 
 		scan.close(); //fecha o scan
-
+		System.out.println(joao.calcula_idade());
+		System.out.println(seguradora.calcularReceita());
+		System.out.println(samsung.getValorSeguro());
+		System.out.println(joao.getValorSeguro());
+		*/
+		
+		AppMain.menu();
 		
 	} //Fim do método main
 } //Fim da classe main

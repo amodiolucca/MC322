@@ -9,9 +9,9 @@ public class Seguradora {
 	private String telefone ;
 	private String email ;
 	private String endereco ;
-	LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida
-	ArrayList <Sinistro> listaSinistros; //ArrayList, pois há a busca mais rápida
-
+	private LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida
+	private ArrayList <Sinistro> listaSinistros; //ArrayList, pois há a busca mais rápida
+	private static ArrayList <Seguradora> listaSeguradoras = new ArrayList<>();
  // Construtor
 	public Seguradora ( String nome , String telefone , String email , String endereco ) {
 		this . nome = nome ;
@@ -44,6 +44,9 @@ public class Seguradora {
 		return listaSinistros ;
 	}
 	
+	public static ArrayList <Seguradora> getListaSeguradoras(){
+		return listaSeguradoras;
+	}
 	public void setTelefone ( String telefone ) {
 		this . telefone = telefone ;
 	}
@@ -76,10 +79,12 @@ public class Seguradora {
 		if (!listaClientes.contains(cliente)) { //se não contém o cliente
 			if(cliente instanceof ClientePF && ((ClientePF) cliente).getCpf()!=null) { //verifica se o cliente é válido
 				listaClientes.add(cliente); //adiciona o cliente
+				cliente.setValorSeguro(calcularPrecoSeguroCliente(cliente)); //adiciona o valor do seguro ao cliente
 				return true;
 			}
 			if(cliente instanceof ClientePJ && ((ClientePJ) cliente).getCnpj()!=null) { //verifica se o cliente é válido
 				listaClientes.add(cliente); //adiciona o cliente
+				cliente.setValorSeguro(calcularPrecoSeguroCliente(cliente)); //adiciona o valor do seguro ao cliente
 				return true;
 			}
 		}
@@ -203,6 +208,51 @@ public class Seguradora {
 			System.out.println(c);
 		}
 	}
+	
+	public double calcularPrecoSeguroCliente(Cliente cliente) {
+		return cliente.calculaScore()*(1+numeroSinistros(cliente));
+	}
+	
+	public double calcularReceita() {
+		double receita = 0.0;
+		for(Cliente c:listaClientes) {
+			receita += c.getValorSeguro();
+		}
+		return receita;
+	}
+	
+	public int numeroSinistros(Cliente cliente) {
+		int numero_sinistros = 0;
+		for(Sinistro s:listaSinistros) {
+			if (s.getCliente().equals(cliente)){
+				numero_sinistros ++;
+			}
+		}
+		return numero_sinistros;
+	}
+	
+	public static void adicionaSeguradora(Seguradora seguradora) {
+		listaSeguradoras.add(seguradora);
+		}
+	
+	public static Seguradora buscarSeguradora(String nome) {
+		for(Seguradora s: listaSeguradoras) {
+			if(s.getNome().equals(nome)) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	public Cliente buscarCliente(String nome) {
+		for(Cliente c: listaClientes) {
+			if(c.getNome().equals(nome)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
 	
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
 	public String toString() {

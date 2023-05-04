@@ -5,13 +5,15 @@ import java.util.*;
 public class ClientePJ extends Cliente {
 	private final String cnpj;
 	private Date dataFundacao;
+	private int qtdeFuncionarios;
 	
-	public ClientePJ ( String nome , String endereco , String cnpj , String dataFundacao ) {
+	public ClientePJ ( String nome , String endereco , String cnpj , String dataFundacao, int qtdeFuncionarios ) {
 			// chama o construtor da superclasse
 			super (nome , endereco);
 			if(validarCNPJ(cnpj)) {
 				this . cnpj = cnpj ;
 				this . dataFundacao = Auxiliar.parseDate(dataFundacao) ;
+				this.qtdeFuncionarios = qtdeFuncionarios;
 			} else {
 				this.cnpj = null; //antes de adicionar o cliente nas listas, verificar se esse campo é null
 			}
@@ -25,14 +27,26 @@ public class ClientePJ extends Cliente {
 	public Date getDataFundacao () {
 		return dataFundacao;
 	}
-
+	
+	public int getQntdeFuncionarios() {
+		return qtdeFuncionarios;
+	}
+	
 	public void setDataNascimento(String dataNascimento) {
 		this.dataFundacao = Auxiliar.parseDate(dataNascimento);
 	}
-		
+	
+	public void setQtdeFuncionarios(int qtdeFuncionarios) {
+		this.qtdeFuncionarios = qtdeFuncionarios;
+	}
 		
 	//Métodos gerais
-		
+	
+	public double calculaScore() {
+		return CalcSeguro.VALOR_BASE.getValor()*(1+(qtdeFuncionarios)/100)*this.getListaVeiculos().size();
+	}
+	
+	
 	/**
 	 * Método que verifica se determinado CNPJ é válido
 	 * @param cnpj (String)
@@ -126,7 +140,8 @@ public class ClientePJ extends Cliente {
 
 	@Override
 	public String toString() {
-		return "ClientePJ [Nome: " + this.getNome() + ", Endereço: " + this.getEndereco() + ", CNPJ: " + cnpj + ", Data de Fundação: " + dataFundacao + "]";
+		return "ClientePJ [Nome: " + this.getNome() + ", Endereço: " + this.getEndereco() + ", CNPJ: " + cnpj + ", Data de Fundação: " + dataFundacao 
+				+ ", Quantidade de funcionários:  "+ qtdeFuncionarios +"]";
 	}
 
 		

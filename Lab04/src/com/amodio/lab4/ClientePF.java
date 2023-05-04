@@ -1,10 +1,10 @@
 package com.amodio.lab4; //Pacote com.amodio.lab4
 
-import java.time.Period;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
+
 
 public class ClientePF extends Cliente {
 	//Declaração dos atributos
@@ -80,20 +80,33 @@ public class ClientePF extends Cliente {
 		
 	//Métodos gerais
 	
-/**
-	public Double calculaScore() {
-		 
+	public double calculaScore() {
+		
+		int idade = calcula_idade();
+		double fator_idade;
+		
+		if(idade>=18 && idade < 30) {
+			fator_idade = CalcSeguro.FATOR_18_30.getValor();
+		} else if(idade>=30 && idade <60) {
+			fator_idade = CalcSeguro.FATOR_30_60.getValor();
+		} else {
+			fator_idade = CalcSeguro.FATOR_60_90.getValor();
+		}
+		return(CalcSeguro.VALOR_BASE.getValor()*fator_idade*getListaVeiculos().size());
 	}
-	
-	private int calcula_idade() {
+
+	@SuppressWarnings("deprecation")
+	public int calcula_idade() {
 		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
 		Calendar calendario = Calendar.getInstance(localHorario);
 		Date data_atual = calendario.getTime();
-		long diferenca = data_atual.getTime() - dataNascimento.getTime();
-		//long diferenca_dias = TimeUnit.DAYS.convert(diferenca, TimeUnit.MILLISECONDS);
-		return  (int) (diferenca / (1000 * 60 * 60 * 24 * ));
+		int diferenca_anos = data_atual.getYear() - dataNascimento.getYear();
+		if((dataNascimento.getMonth()>data_atual.getMonth() )|| (dataNascimento.getMonth() == data_atual.getMonth() && dataNascimento.getDate()> data_atual.getDate())) {
+			diferenca_anos --;
+		}
+		return diferenca_anos;
 	}
-	**/
+	
 	/**
 	 * Método que verifica se o Cadastro de Pessoa Física informado é válido de
 	 * acordo com as restrições
