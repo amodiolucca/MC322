@@ -9,7 +9,7 @@ public enum Listar {
 	LISTAR_VEICULO_POR_SEGURADORA(25),
 	VOLTAR(10);
 	
-public final int operacao ;
+	private final int operacao ;
 	
 	Listar(int operacao ) {
 		this . operacao = operacao ;
@@ -17,5 +17,14 @@ public final int operacao ;
 
 	public int getOperacao () {
 		return this . operacao ;
+	}
+	
+	public static Listar busca(int valor) {
+		for (Listar i : Listar.values()) {
+			if (i.getOperacao() == valor) {
+				return i;
+			}
+		}
+		return null;
 	}
 }

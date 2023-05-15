@@ -21,7 +21,9 @@ public class Cliente {
 	public String getNome() {
 		return nome;
 	}
-
+	public String getDocumento() {
+		return null;
+	}
 
 	public String getEndereco() {
 		return endereco;
@@ -47,6 +49,10 @@ public class Cliente {
 	public void setValorSeguro(double valorSeguro) {
 		this.valorSeguro = valorSeguro;
 	}
+	
+	public void setListaVeiculos(LinkedList<Veiculo> lista) {
+		this.listaVeiculos = lista;
+	}
 
 	// Métodos gerais
 	
@@ -55,9 +61,11 @@ public class Cliente {
 	 * @param veiculo (Veiculo)
 	 * @return boolean
 	 */
-	public boolean cadastraVeiculo (Veiculo veiculo) {
-		if(!listaVeiculos.contains(veiculo)) { //se não estiver na lista
+	public boolean cadastraVeiculo (Veiculo veiculo, Seguradora seguradora) {
+		if(!this.contemVeiculo(veiculo)) { //verifica se o veículo já está cadastrado pela função contém
+			//o método contains faz a verificaçãoo por objeto, mas nesse caso, queremos comparar objetos diferentes mas equivalentes
 			listaVeiculos.add(veiculo); //adiciona na lista
+			this.setValorSeguro(seguradora.calcularPrecoSeguroCliente(this)); //atualiza o valor do seguro
 			return true;
 		}
 		return false;
@@ -68,10 +76,13 @@ public class Cliente {
 	 * @param veiculo (Veiculo)
 	 * @return boolean
 	 */
-	public boolean removeVeiculo (Veiculo veiculo) { 
-		if(listaVeiculos.contains(veiculo)) { //se estiver na lista
-			listaVeiculos.remove(veiculo); //remove
-			return true;
+	public boolean removeVeiculo (String placa, Seguradora seguradora) { 
+		for(Veiculo v:listaVeiculos) {
+			if(v.getPlaca().equals(placa)) {
+				listaVeiculos.remove(v);
+				this.setValorSeguro(seguradora.calcularPrecoSeguroCliente(this)); //atualiza o valor do seguro
+				return true;
+			}
 		}
 		return false;
 	}
@@ -81,14 +92,22 @@ public class Cliente {
 	 * @param lista (LinkedList<Veiculo>)
 	 */
 	public void imprimeListaVeiculos(LinkedList<Veiculo> lista) {
+		
+		if(listaVeiculos == null|| listaVeiculos.isEmpty()) {
+			System.out.println("Nenhum veículo encontrado");
+			return;
+		}
 		for(Veiculo v:lista) {
 			System.out.println(v);
 		}
 	}
 	
 	public Veiculo buscarVeiculo(String modelo) {
+		if(listaVeiculos == null|| listaVeiculos.isEmpty()) {
+			return null;
+		}
 		for(Veiculo v: listaVeiculos) {
-			if(v.getModelo().equals(modelo)) {
+			if(v.getPlaca().equals(modelo)) {
 				return v;
 			}
 		}
@@ -98,6 +117,19 @@ public class Cliente {
 	public double calculaScore() {
 		return 0.0;
 	}
+	
+	public boolean contemVeiculo(Veiculo veiculo) {
+		if(listaVeiculos== null|| listaVeiculos.isEmpty()) {
+			return false;
+		}
+		for(Veiculo v: listaVeiculos) {
+			if(v.getPlaca().equals(veiculo.getPlaca())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		return "Cliente [Nome: " + nome + ", Endereço: " + endereco + "]";

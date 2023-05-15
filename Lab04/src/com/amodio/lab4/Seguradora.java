@@ -20,6 +20,7 @@ public class Seguradora {
 		this . endereco = endereco ;
 		this.listaSinistros = new ArrayList<>();
 		this.listaClientes = new LinkedList<>();
+		Seguradora.adicionaSeguradora(this);
 		
 	}
 
@@ -76,17 +77,11 @@ public class Seguradora {
 	 * @return boolean
 	 */
 	public boolean cadastrarCliente(Cliente cliente) {
-		if (!listaClientes.contains(cliente)) { //se não contém o cliente
-			if(cliente instanceof ClientePF && ((ClientePF) cliente).getCpf()!=null) { //verifica se o cliente é válido
+		if (!this.contemCliente(cliente)) { //verifica se o cliente já está cadastrado pela função contém
+			//o método contains faz a verificaçãoo por objeto, mas nesse caso, queremos comparar objetos diferentes mas equivalentes
 				listaClientes.add(cliente); //adiciona o cliente
 				cliente.setValorSeguro(calcularPrecoSeguroCliente(cliente)); //adiciona o valor do seguro ao cliente
 				return true;
-			}
-			if(cliente instanceof ClientePJ && ((ClientePJ) cliente).getCnpj()!=null) { //verifica se o cliente é válido
-				listaClientes.add(cliente); //adiciona o cliente
-				cliente.setValorSeguro(calcularPrecoSeguroCliente(cliente)); //adiciona o valor do seguro ao cliente
-				return true;
-			}
 		}
 		return false;
 	}
@@ -98,8 +93,20 @@ public class Seguradora {
 	 */
 	public boolean removerCliente(String cliente) {
 		for(Cliente c:listaClientes) {
-			if(c.getNome().equals(cliente)) {
+			//Os dígitos especiais de ambos os documentos são retirados para a comparação dizer respeito somente ao número
+			if(c.getDocumento().replaceAll("[^0-9]", "").equals(cliente.replaceAll("[^0-9]", ""))) { 
 				listaClientes.remove(c);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean removerSinistro(int Id) {
+		for(Sinistro s:listaSinistros) {
+			if(s.getId() == Id) {
+				listaSinistros.remove(s);
+				s.getCliente().setValorSeguro(calcularPrecoSeguroCliente(s.getCliente())); //atualiza o valor do seguro
 				return true;
 			}
 		}
@@ -113,13 +120,13 @@ public class Seguradora {
 	 */
 	public LinkedList<Cliente> listarClientes(String cliente){
 		LinkedList<Cliente> lista= new LinkedList<>();
-		if(cliente.equals("ClientePJ")) { //se a String for PJ
+		if(cliente.equals("PJ")) { //se a String for PJ
 			for(Cliente c:listaClientes) { //para cada cliente na lista
 				if (c instanceof ClientePJ){ //se for PJ
 					lista.add(c); //Adiciona na lista
 				}
 			}
-		} else if(cliente.equals("ClientePF")) { //se a String for PF
+		} else if(cliente.equals("PF")) { //se a String for PF
 			for(Cliente c:listaClientes) { //para cada cliente na lista
 				if (c instanceof ClientePF){ //se for PF
 					lista.add(c); //Adiciona na lista
@@ -143,19 +150,26 @@ public class Seguradora {
 	 */
 	public boolean gerarSinistro(String data, String endereco, Seguradora seguradora, Cliente cliente, Veiculo veiculo) {
 		int variavel_indicadora = 0; //variável que vai indicar se há repetição de ID
-		if(listaClientes.contains(cliente)) { //verifica se o cliente é da seguradora realmente
+		if(listaClientes == null|| cliente.getListaVeiculos()==null|| listaClientes.isEmpty()|| cliente.getListaVeiculos().isEmpty()) {
+			return false;
+		}
+		if(listaClientes.contains(cliente) && cliente.getListaVeiculos().contains(veiculo)) { //verifica se o cliente é da seguradora realmente
 			Sinistro sinistro = new Sinistro(data, endereco, seguradora, cliente, veiculo); //gera o sinistro
-			
-			do {
-				for(Sinistro s:listaSinistros) {
-					if(sinistro.getId()==s.getId()) { //verifica se o ID é o mesmo de algum sinistro da lista
-						sinistro = new Sinistro(data, endereco, seguradora, cliente, veiculo); //se for, gera o sinistro novamente
-						variavel_indicadora = 1; //variavel indicadora aponta 1
-						break;
+			if((listaSinistros != null) && (!listaSinistros.isEmpty())) {
+				do {
+					for(Sinistro s:listaSinistros) {
+						if(sinistro.getId()==s.getId()) { //verifica se o ID é o mesmo de algum sinistro da lista
+							sinistro = new Sinistro(data, endereco, seguradora, cliente, veiculo); //se for, gera o sinistro novamente
+							variavel_indicadora = 1; //variavel indicadora aponta 1
+							break;
+						}
 					}
-				}
-			} while (variavel_indicadora ==1); //Se a indicadora for 0, o ID não é repetido
+				} while (variavel_indicadora ==1); //Se a indicadora for 0, o ID não é repetido
+			}
+			
+			
 			listaSinistros.add(sinistro); //Adiciona o sinistro na lista
+			cliente.setValorSeguro(calcularPrecoSeguroCliente(cliente));
 			return true;
 		}
 		return false;
@@ -167,10 +181,14 @@ public class Seguradora {
 	 * @return boolean
 	 */
 	
-	public boolean visualizarSinistro(String cliente) {
+	public boolean visualizarSinistro(String documento) {
 		int variavel_indicadora = 0; //variável indicadora que representa se o cliente possui ou não sinistro
+		//indicadora necessária, pois pode haver mais de um sinistro
+		if(listaSinistros == null|| listaSinistros.isEmpty()) {
+			return false;
+		}
 		for(Sinistro sinistro: listaSinistros) { //para cada sinistro
-			if(sinistro.getCliente().getNome().equals(cliente)) { //se o cliente do sinistro for o cliente buscado
+			if(sinistro.getCliente().getDocumento().replaceAll("[^0-9]", "").equals(documento.replaceAll("[^0-9]", ""))) { //se o cliente do sinistro for o cliente buscado
 				System.out.println(sinistro); //imprime o sinistro
 				variavel_indicadora = 1; //indicadora fica com o valor 1
 			}
@@ -186,6 +204,10 @@ public class Seguradora {
 	 * Método que imprime todos os sinistros da seguradora
 	 */
 	public void listarSinistros(){
+		if(listaSinistros == null || listaSinistros.isEmpty()) {
+			System.out.println("Nenhum sinistro encontrado");
+			return;
+		}
 		for(Sinistro s:listaSinistros) {
 			System.out.println(s);
 		}
@@ -195,64 +217,144 @@ public class Seguradora {
 	 * @param lista (ArrayList<Sinistro>)
 	 */
 	public void imprime_listaSinistro(ArrayList<Sinistro> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum sinistro encontrado");
+			return;
+		}
 		for(Sinistro s:lista) {
 			System.out.println(s);
 		}
 	}
+	
 	/**
 	 * Método que imprime uma lista de clientes de maneira organizada
 	 * @param lista (LinkedList <Cliente>)
 	 */
 	public void imprime_listaCliente(LinkedList <Cliente> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum cliente encontrado");
+			return;
+		}
 		for(Cliente c: lista) {
 			System.out.println(c);
 		}
 	}
 	
+	/*
+	 * Método que calcula o preço do seguro de um cliente
+	 */
 	public double calcularPrecoSeguroCliente(Cliente cliente) {
 		return cliente.calculaScore()*(1+numeroSinistros(cliente));
 	}
 	
+	/*
+	 * Método que calcula a receita da seguradora
+	 */
 	public double calcularReceita() {
 		double receita = 0.0;
-		for(Cliente c:listaClientes) {
-			receita += c.getValorSeguro();
+		if(listaClientes == null|| listaClientes.isEmpty()) {
+			return 0.0;
+		}
+		for(Cliente c:listaClientes) { //itera na lista
+			receita += c.getValorSeguro(); //soma na acumuladora
 		}
 		return receita;
 	}
 	
-	public int numeroSinistros(Cliente cliente) {
+	/*
+	 * método que obtém o número de sinistros de determinado cliente
+	 */
+	private int numeroSinistros(Cliente cliente) {
 		int numero_sinistros = 0;
-		for(Sinistro s:listaSinistros) {
-			if (s.getCliente().equals(cliente)){
-				numero_sinistros ++;
+		if(listaSinistros == null|| listaSinistros.isEmpty()) {
+			return 0;
+		}
+		for(Sinistro s:listaSinistros) { //itera na lista de sinistros
+			if (s.getCliente().equals(cliente)){ //quando o cliente é o mesmo
+				numero_sinistros ++; //soma na acumuladora
 			}
 		}
 		return numero_sinistros;
 	}
 	
-	public static void adicionaSeguradora(Seguradora seguradora) {
+	/*
+	 * método que adiciona a seguradora recém cadastrada na lista de seguradoras
+	 */
+	private static void adicionaSeguradora(Seguradora seguradora) {
 		listaSeguradoras.add(seguradora);
 		}
 	
+	/*
+	 * Método que busca uma seguradora na lista de seguradoras
+	 */
 	public static Seguradora buscarSeguradora(String nome) {
-		for(Seguradora s: listaSeguradoras) {
-			if(s.getNome().equals(nome)) {
+		if(listaSeguradoras == null|| listaSeguradoras.isEmpty()) {
+			return null; // se lista vazia, retorna null
+		}
+		for(Seguradora s: listaSeguradoras) { //itera na lista
+			if(s.getNome().equals(nome)) { //quando nome coincide, retorna a seguradora
 				return s;
 			}
 		}
 		return null;
 	}
 	
-	public Cliente buscarCliente(String nome) {
+	/*
+	 * Método que busca um cliente na lista de clientes
+	 */
+	public Cliente buscarCliente(String documento) {
+		if(listaClientes == null|| listaClientes.isEmpty()) {
+			return null;
+		}
 		for(Cliente c: listaClientes) {
-			if(c.getNome().equals(nome)) {
+			//Os dígitos especiais de ambos os documentos são retirados para a comparação dizer respeito somente ao número
+			if(c.getDocumento().replaceAll("[^0-9]", "").equals(documento.replaceAll("[^0-9]", ""))) {//quando documento coincide, retorna o cliente
 				return c;
 			}
 		}
 		return null;
 	}
 	
+	/*
+	 * Método que lista os veículos de uma seguradora
+	 */
+	public boolean listarVeiculos() {
+		//indicadora necessária, pois pode haver mais de um veículo
+		int variavel_indicadora = 0; //variável indicadora que representa se a seguradora possui ou não veículos
+		if(listaClientes == null|| listaClientes.isEmpty()) {
+			return false;
+		}
+		for(Cliente c: listaClientes) {
+			if(c.getListaVeiculos()==null|| c.getListaVeiculos().isEmpty()) { //se certa lista é vazia
+				continue; //vai para a próxima
+			}
+			for(Veiculo v: c.getListaVeiculos()) {
+				variavel_indicadora = 1; //indica que tem ao menos 1 veículo
+				System.out.println(v);
+			}
+		}
+		if(variavel_indicadora ==1) { //se indicadora for 1
+			return true; //retorna true
+		} else {
+			return false;
+		}
+	}
+	
+	/*
+	 * Método que verifica se a seguradora contém um certo cliente, por comparação de documentos
+	 */
+	private boolean contemCliente(Cliente cliente) {
+		if(listaClientes == null|| listaClientes.isEmpty()) {
+			return false;
+		}
+		for(Cliente c: listaClientes) {
+			//Os dígitos especiais de ambos os documentos são retirados para a comparação dizer respeito somente ao número
+			if(c.getDocumento().replaceAll("[^0-9]", "").equals(cliente.getDocumento().replaceAll("[^0-9]", ""))) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
 	public String toString() {

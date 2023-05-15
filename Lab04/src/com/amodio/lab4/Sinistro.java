@@ -14,7 +14,7 @@ public class Sinistro {
 
 //Construtor
 	public Sinistro(String data, String endereco, Seguradora seguradora, Cliente cliente, Veiculo veiculo) {
-		this.data = Auxiliar.parseDate(data);
+		this.data = Validacao.parseDate(data);
 		this.endereco = endereco;
 		this.id = gera_id();
 		this.seguradora = seguradora;
@@ -49,7 +49,7 @@ public class Sinistro {
 		this . id = id ;
 	}
 	public void setData ( String data ) {
-		this . data = Auxiliar.parseDate(data) ;
+		this . data = Validacao.parseDate(data) ;
 	}
 	public void setEndereco ( String endereco ) {
 		this .endereco = endereco ;

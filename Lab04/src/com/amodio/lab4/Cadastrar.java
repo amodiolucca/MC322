@@ -7,7 +7,7 @@ public enum Cadastrar {
 	CADASTRAR_SEGURADORA(13),
 	VOLTAR(10);
 
-public final int operacao ;
+	private final int operacao ;
 	
 	Cadastrar(int operacao ) {
 		this . operacao = operacao ;
@@ -15,5 +15,13 @@ public final int operacao ;
 
 	public int getOperacao () {
 		return this . operacao ;
+	}
+	public static Cadastrar busca(int valor) {
+		for (Cadastrar i : Cadastrar.values()) {
+			if (i.getOperacao() == valor) {
+				return i;
+			}
+		}
+		return null;
 	}
 }

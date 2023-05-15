@@ -7,7 +7,7 @@ public enum Excluir {
 	EXCLUIR_SINISTRO(33),
 	VOLTAR(10);
 	
-public final int operacao ;
+	public final int operacao ;
 	
 	Excluir(int operacao ) {
 		this . operacao = operacao ;
@@ -15,5 +15,14 @@ public final int operacao ;
 
 	public int getOperacao () {
 		return this . operacao ;
+	}
+	
+	public static Excluir busca(int valor) {
+		for (Excluir i : Excluir.values()) {
+			if (i.getOperacao() == valor) {
+				return i;
+			}
+		}
+		return null;
 	}
 }
