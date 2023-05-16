@@ -9,14 +9,14 @@ public enum Cadastrar {
 
 	private final int operacao ;
 	
-	Cadastrar(int operacao ) {
+	Cadastrar(int operacao ) { //construtor
 		this . operacao = operacao ;
 	}
 
-	public int getOperacao () {
+	public int getOperacao () { //getter
 		return this . operacao ;
 	}
-	public static Cadastrar busca(int valor) {
+	public static Cadastrar busca(int valor) { //busca o valor correspondente
 		for (Cadastrar i : Cadastrar.values()) {
 			if (i.getOperacao() == valor) {
 				return i;

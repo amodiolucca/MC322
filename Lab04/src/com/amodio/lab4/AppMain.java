@@ -180,7 +180,7 @@ public class AppMain{
 				}
 				//scan na escolha e busca da opção correspondente
 				escolhaOp = scan.nextInt();
-				scan.nextLine();
+				scan.nextLine(); //consome o \n que sobra da entrada
 				MenuOperacoes m = MenuOperacoes.busca(escolhaOp); //.busca(valor lido)
 				
 				if (m != null) {
@@ -312,7 +312,7 @@ public class AppMain{
 				}
 				//scan na escolha e busca da opção correspondente
 				escolhaOp = scan.nextInt();
-				scan.nextLine();
+				scan.nextLine(); //consome o \n que sobra da entrada
 				Cadastrar c= Cadastrar.busca(escolhaOp); //.busca(valor lido)
 				if(c!= null) {
 					
@@ -398,7 +398,7 @@ public class AppMain{
 				}
 				
 				escolhaOp = scan.nextInt();
-				scan.nextLine();
+				scan.nextLine(); //consome o \n que sobra da entrada
 				Listar l = Listar.busca(escolhaOp); //.busca(valor lido)
 				
 				if(l!= null) {
@@ -500,7 +500,7 @@ public class AppMain{
 				}
 				//scan da escolha e busca pelo valor correspondente
 				escolhaOp = scan.nextInt();
-				scan.nextLine();
+				scan.nextLine(); //consome o \n que sobra da entrada
 				Excluir e = Excluir.busca(escolhaOp); //.busca(valor lido)
 				
 				if(e!=null) {

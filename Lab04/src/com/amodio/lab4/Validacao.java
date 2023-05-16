@@ -235,7 +235,9 @@ public class Validacao {
 		return true;
 	}
 	
-
+/*
+ * Método que verifica se a idade do cliente está entre 18 e 90 anos
+ */
 	@SuppressWarnings("deprecation")
 	public static boolean validaNascimento(String data_Nascimento) {
 		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
