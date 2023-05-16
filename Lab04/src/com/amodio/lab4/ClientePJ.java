@@ -16,9 +16,6 @@ public class ClientePJ extends Cliente {
 	}
 
 	//Getters e Setters
-	public String getCnpj() {
-		return cnpj;
-	}
 	public String getDocumento() {
 		return cnpj;
 	}
@@ -41,6 +38,9 @@ public class ClientePJ extends Cliente {
 		
 	//Métodos gerais
 	
+	/*
+	 * Método que calcula o score de determinado clientePJ
+	 */
 	public double calculaScore() {
 		
 		if (this.getListaVeiculos()==null) {

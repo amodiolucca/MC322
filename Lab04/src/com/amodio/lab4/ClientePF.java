@@ -30,9 +30,6 @@ public class ClientePF extends Cliente {
 	}
 
 	//Getters e Setters
-	public String getCpf() {
-		return cpf;
-	}
 	public String getDocumento() {
 		return cpf;
 	}
@@ -78,15 +75,18 @@ public class ClientePF extends Cliente {
 	}
 		
 	//Métodos gerais
-	
+	/*
+	 * Método que calcula o score de determinado clientePF
+	 */
 	public double calculaScore() {
 		
 		if (this.getListaVeiculos()==null) {
 			return 0.0;
 		}
-		int idade = calcula_idade();
+		int idade = calcula_idade(); //calcula a idade
 		double fator_idade;
 		
+		//pega o valor correspondente à idade do enum
 		if(idade>=18 && idade < 30) {
 			fator_idade = CalcSeguro.FATOR_18_30.getValor();
 		} else if(idade>=30 && idade <60) {
@@ -97,12 +97,15 @@ public class ClientePF extends Cliente {
 		return(CalcSeguro.VALOR_BASE.getValor()*fator_idade*getListaVeiculos().size());
 	}
 
+	/*
+	 * Método que calcula a idade de um cliente PF
+	 */
 	@SuppressWarnings("deprecation")
 	public int calcula_idade() {
 		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
 		Calendar calendario = Calendar.getInstance(localHorario);
 		Date data_atual = calendario.getTime();
-		int diferenca_anos = data_atual.getYear() - dataNascimento.getYear();
+		int diferenca_anos = data_atual.getYear() - dataNascimento.getYear(); //Diferença entre os anos
 		if((dataNascimento.getMonth()>data_atual.getMonth() )|| (dataNascimento.getMonth() == data_atual.getMonth() && dataNascimento.getDate()> data_atual.getDate())) {
 			diferenca_anos --;
 		}

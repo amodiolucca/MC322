@@ -202,30 +202,52 @@ public class Validacao {
 			return (11 - (soma % 11)); // Caso contrário, é 11 subtraído do resto da divisão por 11
 		}
 	}
-	
+	/*
+	 * Método que verifica se a data está no formato yyyy-mm-dd e se não é uma data futura
+	 */
 	public static boolean validaData(String data) {
-		Date dataModificada = parseDate(data);
+		Date dataModificada = parseDate(data); //tenta converter para date
 		if(dataModificada == null) {
 			return false;
 		}
 		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
 		Calendar calendario = Calendar.getInstance(localHorario);
 		Date data_atual = calendario.getTime();
-		if(data_atual.getTime()<dataModificada.getTime()) {
-			return false;
-		}
+		if(data_atual.getTime()<dataModificada.getTime()) { // se for data futura
+			return false; //retorna false
+		} 
 		return true;
 	}
 	
+	/*
+	 * Método que verifica se o nome possui apenas letras
+	 */
 	public static boolean validaNome(String nome) {
 		int tamanho = nome.length();
 		if(nome == null || nome == "") {
 			return false;
 		}
-		for(int i=0;i<tamanho;i++) {
-			if(!Character.isLetter(nome.charAt(i))) {
+		for(int i=0;i<tamanho;i++) { //pra cada caracter
+			if(!Character.isLetter(nome.charAt(i))) { //verifica se é letra
 				return false;
 			}
+		}
+		return true;
+	}
+	
+
+	@SuppressWarnings("deprecation")
+	public static boolean validaNascimento(String data_Nascimento) {
+		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
+		Calendar calendario = Calendar.getInstance(localHorario);
+		Date data_atual = calendario.getTime();
+		Date dataNascimento = parseDate(data_Nascimento);
+		int diferenca_anos = data_atual.getYear() - dataNascimento.getYear(); //Diferença entre os anos
+		if((dataNascimento.getMonth()>data_atual.getMonth() )|| (dataNascimento.getMonth() == data_atual.getMonth() && dataNascimento.getDate()> data_atual.getDate())) {
+			diferenca_anos --;
+		}
+		if(diferenca_anos<18 || diferenca_anos>90) {
+			return false;
 		}
 		return true;
 	}

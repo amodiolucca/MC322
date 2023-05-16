@@ -63,7 +63,7 @@ public class Cliente {
 	 */
 	public boolean cadastraVeiculo (Veiculo veiculo, Seguradora seguradora) {
 		if(!this.contemVeiculo(veiculo)) { //verifica se o veículo já está cadastrado pela função contém
-			//o método contains faz a verificaçãoo por objeto, mas nesse caso, queremos comparar objetos diferentes mas equivalentes
+			//o método contains faz a verificação por objeto, mas nesse caso, queremos comparar objetos diferentes mas equivalentes
 			listaVeiculos.add(veiculo); //adiciona na lista
 			this.setValorSeguro(seguradora.calcularPrecoSeguroCliente(this)); //atualiza o valor do seguro
 			return true;
@@ -101,23 +101,30 @@ public class Cliente {
 			System.out.println(v);
 		}
 	}
-	
+	/*
+	 * Método que busca um veículo em determinado cliente e o retorna se econtrar
+	 */
 	public Veiculo buscarVeiculo(String modelo) {
 		if(listaVeiculos == null|| listaVeiculos.isEmpty()) {
 			return null;
 		}
-		for(Veiculo v: listaVeiculos) {
-			if(v.getPlaca().equals(modelo)) {
-				return v;
+		for(Veiculo v: listaVeiculos) { //itera na lista
+			if(v.getPlaca().equals(modelo)) { //se as placas são iguais
+				return v; //retorna o veículo
 			}
 		}
 		return null;
 	}
-	
+	/*
+	 * Método de calcular score para ser sobrescrito
+	 */
 	public double calculaScore() {
 		return 0.0;
 	}
 	
+	/*
+	 * Método que verifica se o cliente contém o veículo, por comparação de placas
+	 */
 	public boolean contemVeiculo(Veiculo veiculo) {
 		if(listaVeiculos== null|| listaVeiculos.isEmpty()) {
 			return false;

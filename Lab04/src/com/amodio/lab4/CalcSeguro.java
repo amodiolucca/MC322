@@ -8,11 +8,11 @@ public enum CalcSeguro {
 
 	private double valor;
 	
-	CalcSeguro(Double valor){
+	CalcSeguro(Double valor){ //construtor
 		this.valor = valor;
 	}
 	
-	public Double getValor(){
+	public Double getValor(){ //getter
 		return valor;
 	}
 

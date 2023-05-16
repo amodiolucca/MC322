@@ -11,15 +11,15 @@ public enum Listar {
 	
 	private final int operacao ;
 	
-	Listar(int operacao ) {
+	Listar(int operacao ) { //construtor
 		this . operacao = operacao ;
 	}
 
-	public int getOperacao () {
+	public int getOperacao () { //getter
 		return this . operacao ;
 	}
 	
-	public static Listar busca(int valor) {
+	public static Listar busca(int valor) { //busca a operação correspondente ao valor
 		for (Listar i : Listar.values()) {
 			if (i.getOperacao() == valor) {
 				return i;

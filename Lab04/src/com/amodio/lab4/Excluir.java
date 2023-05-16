@@ -7,17 +7,17 @@ public enum Excluir {
 	EXCLUIR_SINISTRO(33),
 	VOLTAR(10);
 	
-	public final int operacao ;
+	private final int operacao ;
 	
-	Excluir(int operacao ) {
+	Excluir(int operacao ) { //construtor
 		this . operacao = operacao ;
 	}
 
-	public int getOperacao () {
+	public int getOperacao () { //getter
 		return this . operacao ;
 	}
 	
-	public static Excluir busca(int valor) {
+	public static Excluir busca(int valor) { //busca a operação correspondente ao valor
 		for (Excluir i : Excluir.values()) {
 			if (i.getOperacao() == valor) {
 				return i;

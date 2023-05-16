@@ -146,6 +146,12 @@ public class AppMain{
 		listaPJ = seguradora.listarClientes("PJ");
 		System.out.println("Clientes PJ da seguradora:");
 		seguradora.imprime_listaCliente(listaPJ);//Google não aparece mais na lista de Clientes PJ
+		
+		//Preço dos seguros e receita total da seguradora
+		System.out.println("Preço do seguro de João:");
+		System.out.println(seguradora.calcularPrecoSeguroCliente(joao));
+		System.out.println("Preço do seguro de Samsumg:");
+		System.out.println(seguradora.calcularPrecoSeguroCliente(samsung));
 		System.out.println("Receita da seguradora:");
 		System.out.println(seguradora.calcularReceita());
 		
@@ -223,7 +229,8 @@ public class AppMain{
 						}
 						break;
 					//Para a transferencia, o cliente que receberá a lista de veículos já deve ter sido cadastrado na seguradora
-					//Assume-se que a lista de veículos dele é null anteriormente, pois acabou de ser cadastrado
+					//Assume-se que a lista de veículos dele é null anteriormente, pois acabou de ser cadastrado para receber o seguro
+					//transferido
 					case TRANSFERIR_SEGURO:
 						seguradora = escolherSeguradora(scan);
 						if (seguradora == null) {
@@ -328,9 +335,8 @@ public class AppMain{
 						if(seguradora.cadastrarCliente(cliente)){ //tenta cadastrar o cliente
 							System.out.println("Cliente cadastrado com sucesso");
 						} else {
-							System.out.println("Cliente já cadastrado anteriormente");
+							System.out.println("Erro ao cadastrar o veículo");
 						}
-						System.out.println("Voltando ao menu...");
 						break menu_cadastrar;
 					
 					case CADASTRAR_VEICULO:
@@ -345,12 +351,14 @@ public class AppMain{
 							break;
 						}
 						veiculo = criarVeiculo(scan, cliente); //cria um veículo
+						if(veiculo ==null) {
+							break;
+						}
 						if (cliente.cadastraVeiculo(veiculo, seguradora)) {
 							System.out.println("Veículo cadastrado com sucesso"); //faz a busca pelo modelo
-						} else {
-							System.out.println("Veículo já cadastrado anteriormente");
+						}else {
+							System.out.println("Erro ao cadastrar o veículo");
 						}
-						System.out.println("Voltando ao menu...");
 						break menu_cadastrar;
 						
 					case CADASTRAR_SEGURADORA:
@@ -477,7 +485,7 @@ public class AppMain{
 	 * Função para o menu excluir, que organiza as funcionalidades da tela de exclusão
 	 */
 	public static void excluir(Scanner scan) {
-		String documento, placa;
+		String placa;
 		int escolhaOp, id;
 		Cliente cliente;
 		Seguradora seguradora;
@@ -507,12 +515,15 @@ public class AppMain{
 							System.out.println("Seguradora não encontrada, voltando ao menu excluir...");
 							break;
 						}
-						System.out.println("Escolha o cliente a ser removido pelo CPF ou CNPJ");
-						documento = scan.nextLine();
-						if(seguradora.removerCliente(documento)) { //remove pelo documento
+						cliente = escolherCliente(seguradora,scan);
+						if(cliente == null) {
+							System.out.println("Cliente não encontrado, voltando ao menu excluir...");
+							break;
+						}
+						if(seguradora.removerCliente(cliente.getDocumento())) { //remove pelo documento
 							System.out.println("Cliente removido com sucesso");
 						} else {
-							System.out.println("A seguradora não possui esse cliente, voltando ao menu excluir..."); //não encontrou o cliente
+							System.out.println("A seguradora não possui esse cliente, voltando ao menu..."); //não encontrou o cliente
 						}
 						break menu_excluir;
 					
@@ -553,7 +564,17 @@ public class AppMain{
 							System.out.println("Seguradora não encontrada, voltando ao menu excluir...");
 							break;
 						}
-						System.out.println("Escolha o sinistro a ser removido pelo ID");
+						System.out.println("Escolha o sinistro a ser removido pelo ID.");
+						if((seguradora.getListaSinistros()!= null) && (!seguradora.getListaSinistros().isEmpty())){
+							System.out.println("Opções:");
+							for(Sinistro s: seguradora.getListaSinistros()) {
+								System.out.println(s.getId());
+							}
+							
+						} else {
+							System.out.println("Não há sinistros");
+						}
+						System.out.println("Sua escolha:");
 						id = scan.nextInt();
 						scan.nextLine();
 						if(seguradora.removerSinistro(id)) { //tenta remover o sinistro pelo id e retorna true ou false
@@ -670,13 +691,17 @@ public class AppMain{
 				return null;
 			}
 			if(seguradora.buscarCliente(documento)!= null) { //Se for o mesmo CPF de um cliente da seguradora
-				System.out.println("Cliente já cadastrado anteriormente");
+				System.out.println("Cliente já cadastrado anteriormente, voltando ao menu cadastrar...");
 				return null;
 			}
 			System.out.println("Digite a data de nascimento do cliente na forma yyyy-mm-dd:");
 			dataNascimento = scan.nextLine();
 			if(!Validacao.validaData(dataNascimento)) { //verifica se a data de nascimento é válida
 				System.out.println("Insira uma data válida no formato indicado. Voltando ao menu cadastrar");
+				return null;
+			}
+			if(!Validacao.validaNascimento(dataNascimento)) { //verifica se a data de nascimento é válida
+				System.out.println("O cliente deve possuir entre 18 e 90 anos");
 				return null;
 			}
 			ClientePF clientePF = new ClientePF(nome, endereco, dataLicenca, educacao, genero, classeEconomica, documento, dataNascimento);
@@ -699,7 +724,7 @@ public class AppMain{
 				return null;
 			}
 			if(seguradora.buscarCliente(cnpj)!= null) { //Se for o mesmo CPF de um cliente da seguradora
-				System.out.println("Cliente já cadastrado anteriormente");
+				System.out.println("Cliente já cadastrado anteriormente, voltando ao menu cadastrar...");
 				return null;
 			}
 			System.out.println("Digite a data de fundação do cliente:");
@@ -728,7 +753,7 @@ public class AppMain{
 		System.out.println("Digite a placa do veículo:");
 		placa = scan.nextLine();
 		if(cliente.buscarVeiculo(placa)!= null) { //Se for a mesma placa de um veículo do cliente
-			System.out.println("Cliente já cadastrado anteriormente");
+			System.out.println("Veículo já cadastrado anteriormente, voltando ao menu cadastrar...");
 			return null;
 		}
 		System.out.println("Digite a marca do veículo:");
