@@ -366,7 +366,7 @@ public class AppMain{
 							System.out.println("Seguradora cadastrada anteriormente, voltando ao menu cadastrar...");
 							break;
 						}
-						System.out.println("Seguradora já cadastrada com sucesso. Voltando ao menu...");
+						System.out.println("Seguradora cadastrada com sucesso. Voltando ao menu...");
 						break menu_cadastrar;
 					default:
 						break;
@@ -667,7 +667,7 @@ public class AppMain{
 			System.out.println("Digite o nome do cliente:");
 			nome = scan.nextLine();
 			if(!Validacao.validaNome(nome)) { //Se o nome não possuir somente letras
-				System.out.println("Insira um nome válido, apenas com letras");
+				System.out.println("Insira um nome válido, apenas com letras. Voltando ao menu cadastrar...");
 				return null;
 			}
 			System.out.println("Digite o endereço do cliente:");
@@ -675,7 +675,7 @@ public class AppMain{
 			System.out.println("Digite a data de licença do cliente na forma yyyy-mm-dd:");
 			dataLicenca = scan.nextLine();
 			if(!Validacao.validaData(dataLicenca)) { //Se não for uma data válida
-				System.out.println("Insira uma data válida no formato indicado. Voltando ao menu cadastrar");
+				System.out.println("Insira uma data válida no formato indicado. Voltando ao menu cadastrar...");
 				return null;
 			}
 			System.out.println("Digite o nível de educação do cliente:");

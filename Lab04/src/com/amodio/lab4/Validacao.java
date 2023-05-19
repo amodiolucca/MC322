@@ -228,7 +228,7 @@ public class Validacao {
 			return false;
 		}
 		for(int i=0;i<tamanho;i++) { //pra cada caracter
-			if(!Character.isLetter(nome.charAt(i))) { //verifica se é letra
+			if(Character.isDigit(nome.charAt(i))) { //verifica se é letra
 				return false;
 			}
 		}
