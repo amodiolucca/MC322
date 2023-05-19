@@ -101,7 +101,7 @@ public class ClientePF extends Cliente {
 	 * Método que calcula a idade de um cliente PF
 	 */
 	@SuppressWarnings("deprecation")
-	public int calcula_idade() {
+	private int calcula_idade() {
 		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
 		Calendar calendario = Calendar.getInstance(localHorario);
 		Date data_atual = calendario.getTime();
