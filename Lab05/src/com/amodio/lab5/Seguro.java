@@ -23,6 +23,7 @@ public abstract class Seguro {
 		this.seguradora = seguradora;
 		this.listaSinistros = new ArrayList<>();
 		this.listaCondutores = new ArrayList<>();
+		numeroSeguros++;
 	}
 	
 	//getters e setters
@@ -75,7 +76,7 @@ public abstract class Seguro {
 		this.listaCondutores = listaCondutores;
 	}
 	
-	public void setValorMensal(double valorMensal) {
+	protected void setValorMensal(double valorMensal) {
 		this.valorMensal = valorMensal;
 	}
 	
