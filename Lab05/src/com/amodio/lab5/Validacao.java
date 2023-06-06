@@ -7,6 +7,10 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class Validacao {
+	private static TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
+	private static Calendar calendario = Calendar.getInstance(localHorario);
+	private static Date data_atual = calendario.getTime();
+	
 	/**
 	 * Método que converte uma String de data para o tipo Date
 	 * @param data
@@ -210,12 +214,7 @@ public class Validacao {
 		if(dataModificada == null) {
 			return false;
 		}
-		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
-		Calendar calendario = Calendar.getInstance(localHorario);
-		Date data_atual = calendario.getTime();
-		if(data_atual.getTime()<dataModificada.getTime()) { // se for data futura
-			return false; //retorna false
-		} 
+		
 		return true;
 	}
 	
@@ -238,19 +237,23 @@ public class Validacao {
 /*
  * Método que verifica se a idade do cliente está entre 18 e 90 anos
  */
-	@SuppressWarnings("deprecation")
+
 	public static boolean validaNascimento(String data_Nascimento) {
-		TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
-		Calendar calendario = Calendar.getInstance(localHorario);
-		Date data_atual = calendario.getTime();
-		Date dataNascimento = parseDate(data_Nascimento);
-		int diferenca_anos = data_atual.getYear() - dataNascimento.getYear(); //Diferença entre os anos
-		if((dataNascimento.getMonth()>data_atual.getMonth() )|| (dataNascimento.getMonth() == data_atual.getMonth() && dataNascimento.getDate()> data_atual.getDate())) {
-			diferenca_anos --;
-		}
+		int diferenca_anos;
+		Date Ddata_Nascimento = parseDate(data_Nascimento);
+		diferenca_anos = anos_passados(Ddata_Nascimento);
 		if(diferenca_anos<18 || diferenca_anos>90) {
 			return false;
 		}
 		return true;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static int anos_passados(Date data) {
+		int diferenca_anos = data_atual.getYear() - data.getYear(); //Diferença entre os anos
+		if((data.getMonth()>data_atual.getMonth() )|| (data.getMonth() == data_atual.getMonth() && data.getDate()> data_atual.getDate())) {
+			diferenca_anos --;
+		}
+		return diferenca_anos;
 	}
 }

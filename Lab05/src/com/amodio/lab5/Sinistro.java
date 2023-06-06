@@ -74,8 +74,8 @@ public class Sinistro {
 	@Override
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada
 	public String toString() {
-		return "Sinistro [ID: " + id + ", Data:  " + data + ", Endereço: " + endereco + ",  " + seguro
-				+ ", " + condutor + ", "  + "]";
+		return "Sinistro [ID: " + id + ", Data:  " + data + ", Endereço: " + endereco + ", Seguro: "+ "[" + seguro.getCliente() + ", " + seguro.getId() + "]"
+				+ ", Condutor:  " + condutor.getNome() + "]";
 	}
 	
 }

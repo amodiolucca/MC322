@@ -76,10 +76,15 @@ public abstract class Seguro {
 		this.listaCondutores = listaCondutores;
 	}
 	
+	
 	protected void setValorMensal(double valorMensal) {
 		this.valorMensal = valorMensal;
 	}
-	
+	/**
+	 * Método que autoriza determinado condutor
+	 * @param condutor
+	 * @return
+	 */
 	public boolean autorizarCondutor(Condutor condutor) {
 		if(!listaCondutores.contains(condutor)) {
 			listaCondutores.add(condutor);
@@ -87,7 +92,11 @@ public abstract class Seguro {
 		}
 		return false;
 	}
-	
+	/**
+	 * Método que desautoriza determinado condutor
+	 * @param condutor
+	 * @return
+	 */
 	public boolean desautorizarCondutor(Condutor condutor) {
 		if(listaCondutores.contains(condutor)) {
 			listaCondutores.remove(condutor);
@@ -95,7 +104,14 @@ public abstract class Seguro {
 		}
 		return false;
 	}
-	
+	/**
+	 * Método que gera um sinistro no seguro
+	 * O sinistro também é adicionado ao condutor
+	 * @param data
+	 * @param endereco
+	 * @param condutor
+	 * @return
+	 */
 	public boolean gerarSinistro(String data, String endereco, Condutor condutor) {
 		int variavel_indicadora = 0; //variável que vai indicar se há repetição de ID
 		if(listaCondutores.isEmpty() || listaCondutores ==null){
@@ -116,24 +132,91 @@ public abstract class Seguro {
 			}
 			listaSinistros.add(sinistro);
 			condutor.adicionarSinistro(sinistro);
-			this.setValorMensal(this.calcularValor());
+			valorMensal =calcularValor()/12;
 			return true;
 		}
 		return false;
 	}
-	
+	/**
+	 * Método que remove determinado sinistro do sistema
+	 * O sinistro também é removido do condutor
+	 * @param Id
+	 * @return
+	 */
 	public boolean removerSinistro(int Id) {
 		for(Sinistro s:listaSinistros) {
 			if(s.getId() == Id) {
+				if(!s.getCondutor().removerSinistro(s)) {
+					return false;
+				}
 				listaSinistros.remove(s);
-				this.setValorMensal(this.calcularValor()); //atualiza o valor do seguro
+				valorMensal =calcularValor()/12; //atualiza o valor do seguro
 				return true;
 			}
 		}
 		return false;
 	}
+	/**
+	 * Método que retorna os sinistros de determinado condutor
+	 * @return
+	 */
+	protected int getSinistrosCondutor() {
+		int quantidadeSinistrosCondutor = 0;
+		for (Condutor c: listaCondutores) {
+			quantidadeSinistrosCondutor += c.getListaSinistros().size();
+		}
+		return quantidadeSinistrosCondutor;
+	}
+	/**
+	 * Método que imprime os sinistros de um seguro
+	 */
+	public void listarSinistros() {
+		if(listaSinistros == null || listaSinistros.isEmpty()) {
+			System.out.println("Nenhum sinistro encontrado");
+			return;
+		}
+		for(Sinistro s:listaSinistros) {
+			System.out.println(s);
+		}
+	}
+	/**
+	 * Método que imprime os condutores de um seguro
+	 */
+	public void listarCondutores() {
+		if(listaCondutores == null || listaCondutores.isEmpty()) {
+			System.out.println("Nenhum condutor encontrado");
+			return;
+		}
+		for(Condutor c:listaCondutores) {
+			System.out.println(c);
+		}
+	}
+	/**
+	 * Método que busca um condutor no seguro
+	 * @param cpf
+	 * @return
+	 */
+	public Condutor buscarCondutor(String cpf) {
+		if(listaCondutores == null|| listaCondutores.isEmpty()) {
+			return null;
+		}
+		for(Condutor c: listaCondutores) {
+			if(c.getCpf().replaceAll("[^0-9]", "").equals(cpf.replaceAll("[^0-9]", ""))) {
+				return c;
+			}
+		}
+		return null;
+	}
 	
 	public abstract Cliente getCliente();
 	
 	public abstract double calcularValor();
+
+	@Override
+	public String toString() {
+		return "Seguro [ID: " + ID + ", Data de Início: " + dataInicio + ", Data de Fim: " + dataFim + ", Seguradora: " + seguradora
+				+ ", Valor Mensal: " + valorMensal + "]";
+	}
+	
+	
 }

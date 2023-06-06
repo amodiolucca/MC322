@@ -82,4 +82,33 @@ public class Condutor {
 	public boolean adicionarSinistro(Sinistro sinistro) {
 		return listaSinistros.add(sinistro);
 	}
+	
+	public boolean removerSinistro(Sinistro sinistro) {
+		return listaSinistros.remove(sinistro);
+	}
+	
+	/**
+	 * Método que lista os sinistros de determinado condutor
+	 * @return
+	 */
+	public boolean listarSinistros() {
+		boolean variavel_indicadora = false;
+		if(listaSinistros == null || listaSinistros.isEmpty()) {
+			return false;
+		}
+		for(Sinistro s: listaSinistros) {
+			System.out.println(s);
+			variavel_indicadora = true;
+		}
+		
+		return variavel_indicadora;
+	}
+
+	@Override
+	public String toString() {
+		return "Condutor [CPF: " + cpf + ", Nome: " + nome + ", Telefone: " + telefone + ", Endereço: " + endereco
+				+ ", Email: " + email + ", Data de Nascimento: " + dataNasc +"]";
+	}
+	
+	
 }

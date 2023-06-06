@@ -1,5 +1,7 @@
 package com.amodio.lab5;
 
+import java.util.ArrayList;
+
 public class SeguroPF extends Seguro {
 	
 	//Declaração dos atributos
@@ -10,7 +12,6 @@ public class SeguroPF extends Seguro {
 		super(dataInicio, dataFim, seguradora);
 		this.veiculo = veiculo;
 		this.cliente = cliente;
-		cliente.adicionaVeiculoSegurado(veiculo);
 		this.setValorMensal(this.calcularValor());
 	}
 	
@@ -30,23 +31,30 @@ public class SeguroPF extends Seguro {
 	public void SetCliente(ClientePF cliente) {
 		this.cliente = cliente;
 	}
-	
+	/**
+	 * Método que calcula o valor anual do seguro
+	 */
 	public double calcularValor() {
 		int quantidadeSinistrosCliente = super.getSeguradora().numeroSinistros(cliente);
-		int quantidadeSinistrosCondutor = 0;
 		int quantidadeVeiculosSegurados;
+		int quantidadeSinistrosCondutor;
 		double fator_idade = cliente.fator_idade();
-		
-		if (cliente.getListaVeiculosSegurados()==null || cliente.getListaVeiculosSegurados().isEmpty()) {
+		ArrayList<Seguro> seguros = super.getSeguradora().getSegurosPorCliente(cliente.getDocumento());
+		if(seguros == null) {
 			return 0.0;
 		}
 		
-		quantidadeVeiculosSegurados = cliente.getListaVeiculosSegurados().size();
-		
-		for (Condutor c: super.getListaCondutores()) {
-			quantidadeSinistrosCondutor += c.getListaSinistros().size();
-		}
+		quantidadeVeiculosSegurados = seguros.size(); //quantidade de veículos segurados é igual a quantidade de seguros do cliente, pois cada seguro possui exatamente 1 cliente
+		quantidadeSinistrosCondutor = super.getSinistrosCondutor();
 		
 		return CalcSeguro.VALOR_BASE.getValor()*fator_idade*(1+1/(quantidadeVeiculosSegurados+2))*(2+quantidadeSinistrosCliente/10)*(5+quantidadeSinistrosCondutor/10);
 	}
+
+	@Override
+	public String toString() {
+		return "SeguroPF [ID: " + this.getId() + ", Data de Início: " + this.getDataInicio() + ", Data de Fim: " + this.getDataFim() + ", Seguradora: " + this.getSeguradora()
+				+ ", Valor Mensal: "+ this.getValorMensal() +"Veículo: " + veiculo + ", Cliente: " + cliente + "]";
+	}
+	
+	
 }

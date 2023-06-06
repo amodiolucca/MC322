@@ -28,11 +28,20 @@ public class Frota {
 	public void setListaVeiculos(ArrayList<Veiculo> lista) {
 		this.listaVeiculos = lista;
 	}
-	
+	/**
+	 * Método que gera o Code da frota
+	 * @param cliente
+	 * @return
+	 */
 	private String gerarCode(ClientePJ cliente) {
 		return cliente.getNome() + String.valueOf(numeroFrotas);
 	}
 	
+	/**
+	 * Método que adiciona um veículo na frota
+	 * @param veiculo
+	 * @return
+	 */
 	public boolean addVeiculo(Veiculo veiculo) {
 		if (!listaVeiculos.contains(veiculo)) {
 			listaVeiculos.add(veiculo);
@@ -40,7 +49,11 @@ public class Frota {
 		}
 		return false;
 	}
-	
+	/**
+	 * Método que remove um veículo da frota
+	 * @param veiculo
+	 * @return
+	 */
 	public boolean removeVeiculo(Veiculo veiculo) {
 		if (listaVeiculos.contains(veiculo)) {
 			listaVeiculos.remove(veiculo);
@@ -48,5 +61,24 @@ public class Frota {
 		}
 		return false;
 	}
+	/**
+	 * Método que lista os veículos de uma frota
+	 * @return
+	 */
+	public boolean listarVeiculos() {
+		if(listaVeiculos == null || listaVeiculos.isEmpty()) {
+			return false;
+		}
+		for(Veiculo v: listaVeiculos) {
+			System.out.println(v);
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Frota [Code: " + code + "]";
+	}
+	
 	
 }

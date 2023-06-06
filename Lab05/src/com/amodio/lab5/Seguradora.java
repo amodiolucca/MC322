@@ -5,27 +5,32 @@ import java.util.*;
 public class Seguradora {
 	
 	//Declaração dos atributos
+	private final String cnpj;
 	private String nome ;
 	private String telefone ;
-	private String email ;
 	private String endereco ;
+	private String email ;
 	private LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida
-	private ArrayList <Sinistro> listaSinistros; //ArrayList, pois há a busca mais rápida
 	private ArrayList <Seguro> listaSeguros;
 	private static ArrayList <Seguradora> listaSeguradoras = new ArrayList<>();
  // Construtor
-	public Seguradora ( String nome , String telefone , String email , String endereco ) {
+	public Seguradora (String cnpj, String nome , String telefone, String endereco , String email  ) {
+		this.cnpj = cnpj;
 		this . nome = nome ;
 		this . telefone = telefone ;
 		this . email = email ;
 		this . endereco = endereco ;
-		this.listaSinistros = new ArrayList<>();
 		this.listaClientes = new LinkedList<>();
+		this.listaSeguros = new ArrayList<>();
 		Seguradora.adicionaSeguradora(this);
 		
 	}
 
 // Getters e setters
+	public String getCnpj() {
+		return cnpj;
+	}
+	
 	public String getNome () {
 		return nome ;
 	}
@@ -44,10 +49,6 @@ public class Seguradora {
 	
 	public ArrayList<Seguro> getListaSeguros () {
 		return listaSeguros ;
-	}
-	
-	public ArrayList<Sinistro> getListaSinistros () {
-		return listaSinistros ;
 	}
 	
 	public static ArrayList <Seguradora> getListaSeguradoras(){
@@ -72,7 +73,9 @@ public class Seguradora {
 	public void setEndereco ( String endereco ) {
 		this . endereco = endereco ;
 	}
-	
+	public void setListaSeguros(ArrayList<Seguro> lista) {
+		this.listaSeguros = lista;
+	}
 	
 	//Métodos gerais
 	
@@ -85,7 +88,6 @@ public class Seguradora {
 		if (!this.contemCliente(cliente)) { //verifica se o cliente já está cadastrado pela função contém
 			//o método contains faz a verificaçãoo por objeto, mas nesse caso, queremos comparar objetos diferentes mas equivalentes
 				listaClientes.add(cliente); //adiciona o cliente
-				cliente.setValorSeguro(calcularPrecoSeguroCliente(cliente)); //adiciona o valor do seguro ao cliente
 				return true;
 		}
 		return false;
@@ -93,20 +95,34 @@ public class Seguradora {
 	
 	/**
 	 * Método que remove um cliente da seguradora, desde que esteja anteriormente cadastrado. Retorna um boolean indicando se foi possível remover
+	 * Ao remover o cliente, deve remover os seguros do cliente também
 	 * @param cliente (String)
 	 * @return boolean
 	 */
 	public boolean removerCliente(String cliente) {
+		ArrayList<Seguro> lista = new ArrayList<>();
+		boolean variavel_indicadora = false;
+		if(listaClientes == null || listaClientes.isEmpty()) {
+			return false;
+		}
 		for(Cliente c:listaClientes) {
 			//Os dígitos especiais de ambos os documentos são retirados para a comparação dizer respeito somente ao número
 			if(c.getDocumento().replaceAll("[^0-9]", "").equals(cliente.replaceAll("[^0-9]", ""))) { 
 				listaClientes.remove(c);
-				return true;
+				variavel_indicadora = true;
 			}
 		}
-		return false;
+		if(listaSeguros != null && !listaSeguros.isEmpty()) {
+			for(Seguro s: listaSeguros) {
+				if(!s.getCliente().getDocumento().replaceAll("[^0-9]", "").equals(cliente.replaceAll("[^0-9]", ""))) {
+					lista.add(s);//adiciona na lista os seguros que não são do cliente
+				}
+			}
+		}
+		this.setListaSeguros(lista); //lista de seguros passa a ser essa lista auxiliar
+		return variavel_indicadora;
 	}
-	
+
 	
 	/**
 	 * Método que retorna os clientes do tipo solicitado, ou seja, PF ou PJ.
@@ -136,9 +152,9 @@ public class Seguradora {
 	
 	
 	/**
-	 * Método que visualiza se o cliente possui algum sinistro na seguradora
+	 * Método que visualiza se o cliente possui algum sinistro na seguradora e retorna a lista de sinistros
 	 * @param cliente (String)
-	 * @return boolean
+	 * @return lista
 	 */
 	
 	public ArrayList<Sinistro> getSinistrosPorCliente(String documento) {
@@ -158,30 +174,33 @@ public class Seguradora {
 		}
 		return lista;
 	}
-	
+	/**
+	 * Método que retorna os seguros de determinado cliente
+	 * @param documento (String)
+	 * @return lista
+	 */
+	public ArrayList<Seguro> getSegurosPorCliente(String documento){
+		ArrayList<Seguro> lista = new ArrayList<>();
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
+			return null;
+		}
+		for(Seguro s: listaSeguros) {
+			if(s.getCliente().getDocumento().replaceAll("[^0-9]", "").equals(documento.replaceAll("[^0-9]", ""))) {
+				lista.add(s);
+			}
+		}
+		return lista;
+	}
 	/**
 	 * Método que imprime todos os sinistros da seguradora
 	 */
 	public void listarSinistros(){
-		if(listaSinistros == null || listaSinistros.isEmpty()) {
-			System.out.println("Nenhum sinistro encontrado");
+		if(listaSeguros == null || listaSeguros.isEmpty()) {
+			System.out.println("Nenhum seguro cadastrado");
 			return;
 		}
-		for(Sinistro s:listaSinistros) {
-			System.out.println(s);
-		}
-	}
-	/**
-	 * Método que imprime uma lista de sinistros de maneira organizada
-	 * @param lista (ArrayList<Sinistro>)
-	 */
-	public void imprime_listaSinistro(ArrayList<Sinistro> lista) {
-		if(lista == null|| lista.isEmpty()) {
-			System.out.println("Nenhum sinistro encontrado");
-			return;
-		}
-		for(Sinistro s:lista) {
-			System.out.println(s);
+		for(Seguro s:listaSeguros) {
+			s.listarSinistros();
 		}
 	}
 	
@@ -198,12 +217,31 @@ public class Seguradora {
 			System.out.println(c);
 		}
 	}
-	
-	/*
-	 * Método que calcula o preço do seguro de um cliente
+	/**
+	 * Método que imprime uma lista de seguros de maneira organizada
+	 * @param lista
 	 */
-	public double calcularPrecoSeguroCliente(Cliente cliente) {
-		return cliente.calculaScore()*(1+numeroSinistros(cliente));
+	public void imprime_listaSeguro(ArrayList<Seguro> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum seguro encontrado");
+			return;
+		}
+		for(Seguro s:lista) {
+			System.out.println(s);
+		}
+	}
+	/**
+	 * Método que imprime uma lista de sinistros de maneira organizada
+	 * @param lista
+	 */
+	public void imprime_listaSinistro(ArrayList <Sinistro> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum sinistro encontrado");
+			return;
+		}
+		for(Sinistro s: lista) {
+			System.out.println(s);
+		}
 	}
 	
 	/*
@@ -215,7 +253,7 @@ public class Seguradora {
 			return 0.0;
 		}
 		for(Seguro s: listaSeguros) { //itera na lista
-			receita += s.getValorMensal(); //soma na acumuladora
+			receita += 12*s.getValorMensal(); //soma na acumuladora
 		}
 		return receita;
 	}
@@ -225,7 +263,7 @@ public class Seguradora {
 	 */
 	public int numeroSinistros(Cliente cliente) {
 		int numero_sinistros = 0;
-		if(listaSinistros == null|| listaSinistros.isEmpty()) {
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
 			return 0;
 		}
 		for(Seguro s:listaSeguros) { //itera na lista de seguros
@@ -248,12 +286,12 @@ public class Seguradora {
 	/*
 	 * Método que busca uma seguradora na lista de seguradoras
 	 */
-	public static Seguradora buscarSeguradora(String nome) {
+	public static Seguradora buscarSeguradora(String cnpj) {
 		if(listaSeguradoras == null|| listaSeguradoras.isEmpty()) {
 			return null; // se lista vazia, retorna null
 		}
 		for(Seguradora s: listaSeguradoras) { //itera na lista
-			if(s.getNome().equals(nome)) { //quando nome coincide, retorna a seguradora
+			if(s.getCnpj().equals(cnpj)) { //quando nome coincide, retorna a seguradora
 				return s;
 			}
 		}
@@ -275,30 +313,51 @@ public class Seguradora {
 		}
 		return null;
 	}
+	/**
+	 * Método que busca determinado seguro com base no ID
+	 * @param Id
+	 * @return
+	 */
+	public Seguro buscarSeguro(int Id) {
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
+			return null;
+		}
+		for(Seguro s: listaSeguros) {
+			if(s.getId()==Id) {
+				return s;
+			}
+		}
+		return null;
+	}
 	
 	/*
 	 * Método que lista os veículos de uma seguradora
 	 */
 	public boolean listarVeiculos() {
 		//indicadora necessária, pois pode haver mais de um veículo
-		int variavel_indicadora = 0; //variável indicadora que representa se a seguradora possui ou não veículos
+		boolean variavel_indicadora = false; //variável indicadora que representa se a seguradora possui ou não veículos
 		if(listaClientes == null|| listaClientes.isEmpty()) {
 			return false;
 		}
 		for(Cliente c: listaClientes) {
-			if(c.getListaVeiculos()==null|| c.getListaVeiculos().isEmpty()) { //se certa lista é vazia
-				continue; //vai para a próxima
-			}
-			for(Veiculo v: c.getListaVeiculos()) {
-				variavel_indicadora = 1; //indica que tem ao menos 1 veículo
-				System.out.println(v);
+			if(c.listarVeiculos()) {
+				variavel_indicadora = true;
 			}
 		}
-		if(variavel_indicadora ==1) { //se indicadora for 1
-			return true; //retorna true
-		} else {
+		return variavel_indicadora;
+	}
+	/**
+	 * Método que lista os seguros de uma seguradora
+	 * @return
+	 */
+	public boolean listarSeguros() {
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
 			return false;
 		}
+		for(Seguro s:listaSeguros) {
+			System.out.println(s);
+		}
+		return true;
 	}
 	
 	/*
@@ -311,6 +370,144 @@ public class Seguradora {
 		for(Cliente c: listaClientes) {
 			//Os dígitos especiais de ambos os documentos são retirados para a comparação dizer respeito somente ao número
 			if(c.getDocumento().replaceAll("[^0-9]", "").equals(cliente.getDocumento().replaceAll("[^0-9]", ""))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Método que verifica se um veículo é segurado
+	 * @param veiculo
+	 * @return
+	 */
+	public boolean ehSegurado(Veiculo veiculo) {
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
+			return false;
+		}
+		for(Seguro s:listaSeguros) {
+			if(s instanceof SeguroPF) {
+				if(((SeguroPF) s).getVeiculo().getPlaca().equals(veiculo.getPlaca())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	/**
+	 * Método que verifica se uma frota é segurada
+	 * @param frota
+	 * @return
+	 */
+	public boolean ehSegurado(Frota frota) {
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
+			return false;
+		}
+		for(Seguro s:listaSeguros) {
+			if(s instanceof SeguroPJ) {
+				if(((SeguroPJ) s).getFrota().getCode().equals(frota.getCode())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	/**
+	 * Método que gera um seguroPF
+	 * @param dataInicio
+	 * @param dataFim
+	 * @param seguradora
+	 * @param veiculo
+	 * @param cliente
+	 * @return
+	 */
+	public boolean gerarSeguroPF(String dataInicio, String dataFim, Seguradora seguradora, Veiculo veiculo, ClientePF cliente) {
+		SeguroPF seguro;
+		if(!seguradora.contemCliente(cliente)) {
+			System.out.println("O cliente não é da seguradora");
+			return false;
+		}
+		if(!cliente.contemVeiculo(veiculo)) {
+			System.out.println("O veículo não é do cliente");
+			return false;
+		}
+		seguro = new SeguroPF(dataInicio, dataFim, seguradora, veiculo, cliente);
+		listaSeguros.add(seguro);
+		cliente.adicionaSeguro(seguro);
+		cliente.recalculaValoresSeguro();
+		return true;
+	}
+	/**
+	 * Método que gera um seguroPJ
+	 * @param dataInicio
+	 * @param dataFim
+	 * @param seguradora
+	 * @param frota
+	 * @param cliente
+	 * @return
+	 */
+	public boolean gerarSeguroPJ(String dataInicio, String dataFim, Seguradora seguradora, Frota frota, ClientePJ cliente) {
+		SeguroPJ seguro;
+		if(!seguradora.contemCliente(cliente)) {
+			System.out.println("O cliente não é da seguradora");
+			return false;
+		}
+		if(!cliente.contemFrota(frota)) {
+			System.out.println("A frota não é do cliente");
+			return false;
+		}
+		seguro = new SeguroPJ(dataInicio, dataFim, seguradora, frota, cliente);
+		cliente.adicionaSeguro(seguro);
+		listaSeguros.add(seguro);
+		cliente.recalculaValoresSeguro();
+		return true;
+	}
+	/**
+	 * Método que lista os sinistros de um cliente
+	 * @param documento
+	 * @return
+	 */
+	public boolean visualizarSinistro(String documento) {
+		boolean variavel_indicadora = false;
+		if(listaSeguros == null|| listaSeguros.isEmpty()) {
+			return false;
+		}
+		for(Seguro s: listaSeguros) {
+			if(s.getCliente().getDocumento().replaceAll("[^0-9]", "").equals(documento.replaceAll("[^0-9]", ""))) {
+				s.listarSinistros();
+				variavel_indicadora = true;
+			}
+		}
+		return variavel_indicadora;
+	}
+	/**
+	 * Método que cancela um seguro
+	 * @param seguro
+	 * @return
+	 */
+	public boolean cancelarSeguro(Seguro seguro) {
+		if(listaSeguros == null || listaSeguros.isEmpty()) {
+			return false;
+		}
+		for(Seguro s:listaSeguros) {
+			if(s.getId()==seguro.getId()) {
+				listaSeguros.remove(s);
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Método que remove uma seguradora
+	 * @param seguradora
+	 * @return
+	 */
+	public static boolean removerSeguradora(Seguradora seguradora) {
+		if(listaSeguradoras == null || listaSeguradoras.isEmpty()) {
+			return false;
+		}
+		for(Seguradora s: listaSeguradoras) {
+			if(s.getCnpj().replaceAll("[^0-9]", "").equals(seguradora.getCnpj().replaceAll("[^0-9]", ""))) {
+				listaSeguradoras.remove(s);
 				return true;
 			}
 		}

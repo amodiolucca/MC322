@@ -1,6 +1,7 @@
 package com.amodio.lab5; //Pacote com.amodio.lab5
- 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public abstract class Cliente {
 	// Declaração dos atributos
@@ -8,8 +9,8 @@ public abstract class Cliente {
 	private String telefone;
 	private String endereco;
 	private String email;
-	private LinkedList <Veiculo> listaVeiculos;
-	double valorSeguro;
+	private ArrayList<Seguro> listaSeguros; //lista de seguros no cliente para que um seguro possa ser cancelado quando um
+											//veículo ou frota são removidos, e para atualizar o valor mensal nesses casos	
 	
 	// Construtor
 	public Cliente(String nome, String telefone, String endereco, String email) {
@@ -17,8 +18,7 @@ public abstract class Cliente {
 		this.telefone = telefone;
 		this.endereco = endereco;
 		this.email = email;
-		this.listaVeiculos = new LinkedList<>(); //LinkedList, pois faz a inserção de elementos de forma maia rápida
-		this.valorSeguro = 0.0;
+		this.listaSeguros = new ArrayList<>();
 	}
 
 	// Getters e Setters
@@ -32,20 +32,16 @@ public abstract class Cliente {
 	}
 
 	
-	public LinkedList<Veiculo> getListaVeiculos() {
-		return listaVeiculos;
-	}
-	
-	public Double getValorSeguro() {
-		return valorSeguro;
-	}
-	
 	public String getTelefone() {
 		return telefone;
 	}
 	
 	public String getEmail() {
 		return email;
+	}
+	
+	public ArrayList<Seguro> getListaSeguros () {
+		return listaSeguros;
 	}
 	
 	public void setNome(String nome) {
@@ -56,14 +52,6 @@ public abstract class Cliente {
 		this.endereco = endereco;
 	}
 	
-	public void setValorSeguro(double valorSeguro) {
-		this.valorSeguro = valorSeguro;
-	}
-	
-	public void setListaVeiculos(LinkedList<Veiculo> lista) {
-		this.listaVeiculos = lista;
-	}
-	
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
@@ -71,93 +59,43 @@ public abstract class Cliente {
 	public void setEmail(String email) {
 		this.endereco = email;
 	}
-	// Métodos gerais
 	
-	/**
-	 * Método que cadastra os veículos do cliente e retorna false caso o veículo já esteja cadastrado
-	 * @param veiculo (Veiculo)
-	 * @return boolean
-	 */
-	public boolean cadastraVeiculo (Veiculo veiculo, Seguradora seguradora) {
-		if(!this.contemVeiculo(veiculo)) { //verifica se o veículo já está cadastrado pela função contém
-			//o método contains faz a verificação por objeto, mas nesse caso, queremos comparar objetos diferentes mas equivalentes
-			listaVeiculos.add(veiculo); //adiciona na lista
-			this.setValorSeguro(seguradora.calcularPrecoSeguroCliente(this)); //atualiza o valor do seguro
-			return true;
-		}
-		return false;
+	public void setListaSeguros(ArrayList<Seguro> listaSeguros) {
+		this.listaSeguros = listaSeguros;
 	}
 	
 	/**
-	 * Método que remove veículos do cliente, desde que estejam na lista anteriormente
-	 * @param veiculo (Veiculo)
-	 * @return boolean
+	 * Método para adicionar um Seguro na lista de seguros
+	 * @param seguro (Seguro)
 	 */
-	public boolean removeVeiculo (String placa, Seguradora seguradora) { 
-		for(Veiculo v:listaVeiculos) {
-			if(v.getPlaca().equals(placa)) {
-				listaVeiculos.remove(v);
-				this.setValorSeguro(seguradora.calcularPrecoSeguroCliente(this)); //atualiza o valor do seguro
-				return true;
-			}
-		}
-		return false;
+	public void adicionaSeguro(Seguro seguro) {
+		listaSeguros.add(seguro);
 	}
-	
 	/**
-	 * Método que imprime a lista de veículos de maneira organizada
-	 * @param lista (LinkedList<Veiculo>)
+	 * Método que recalcula o valor de todos os seguros atrelados ao cliente
 	 */
-	public void imprimeListaVeiculos(LinkedList<Veiculo> lista) {
-		
-		if(listaVeiculos == null|| listaVeiculos.isEmpty()) {
-			System.out.println("Nenhum veículo encontrado");
+	public void recalculaValoresSeguro() {
+		if(listaSeguros == null || listaSeguros.isEmpty()) {
 			return;
 		}
-		for(Veiculo v:lista) {
-			System.out.println(v);
+		for(Seguro s:listaSeguros) {
+			s.setValorMensal(s.calcularValor()/12);
 		}
-	}
-	/*
-	 * Método que busca um veículo em determinado cliente e o retorna se econtrar
-	 */
-	public Veiculo buscarVeiculo(String modelo) {
-		if(listaVeiculos == null|| listaVeiculos.isEmpty()) {
-			return null;
-		}
-		for(Veiculo v: listaVeiculos) { //itera na lista
-			if(v.getPlaca().equals(modelo)) { //se as placas são iguais
-				return v; //retorna o veículo
-			}
-		}
-		return null;
-	}
-	/*
-	 * Método de calcular score para ser sobrescrito
-	 */
-	public double calculaScore() {
-		return 0.0;
 	}
 	
-	/*
-	 * Método que verifica se o cliente contém o veículo, por comparação de placas
-	 */
-	public boolean contemVeiculo(Veiculo veiculo) {
-		if(listaVeiculos== null|| listaVeiculos.isEmpty()) {
-			return false;
-		}
-		for(Veiculo v: listaVeiculos) {
-			if(v.getPlaca().equals(veiculo.getPlaca())) {
-				return true;
-			}
-		}
-		return false;
-	}
+	public abstract boolean listarVeiculos();
 	
+	public abstract LinkedList<Veiculo> getListaVeiculos();
+	
+	public abstract Veiculo buscarVeiculo(String placa);
+
 	@Override
 	public String toString() {
-		return "Cliente [Nome: " + nome + ", Endereço: " + endereco + "]";
+		return "Cliente [Nome: " + nome + ", Telefone: " + telefone + ", Endereço: " + endereco + ", Email: " + email + "]";
 	}
+	
+	
+	
 
 
 }
