@@ -5,28 +5,31 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ArquivoClientePF {
+public class ArquivoFrota {
 	Seguradora seguradora;
 	
-	public ArquivoClientePF(Seguradora seguradora) {
+	public ArquivoFrota(Seguradora seguradora) {
 		this.seguradora = seguradora;
 	}
 	public ArrayList<Object> lerArquivo(String path) {
 		String linha = "";
 		String separador = ",";
-		ArrayList<Object> lista = new ArrayList<>();
 		Veiculo veiculo;
+		ArrayList<Object> lista = new ArrayList<>();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(path));
 			in.readLine();
 			while((linha = in.readLine())!= null) {
 				String[] dados = linha.split(separador);
-				ClientePF cliente = new ClientePF(dados[1], dados[2], dados[3], dados[4], dados[6], dados[5], dados[0], dados[7]);
-				veiculo = seguradora.buscarVeiculoRecemCadastrado(dados[8]);
-				if(veiculo!=null) {
-					cliente.cadastraVeiculo(veiculo, seguradora);
+				Frota frota = new Frota(dados[0]);
+				for(int i=0;i<3;i++) {
+					veiculo = seguradora.buscarVeiculoRecemCadastrado(dados[i+1]);
+					if(veiculo!=null) {
+						frota.addVeiculo(veiculo);
+					}
 				}
-				lista.add(cliente);
+				
+				lista.add(frota);
 			}
 			in.close();
 			return lista;

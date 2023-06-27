@@ -312,6 +312,17 @@ public class AppMain{
 		listaPJ = seguradora.listarClientes("PJ");
 		System.out.println("Clientes PJ da seguradora:");
 		seguradora.imprime_listaCliente(listaPJ);//Google não aparece mais na lista de Clientes PJ
+		seguradora.lerDados();
+		System.out.println("Clientes PF lidos por arquivo:");
+		seguradora.imprime_listaCliente(seguradora.getListaClientesPFrecemCadastrados());
+		System.out.println("Clientes PJ lidos por arquivo:");
+		seguradora.imprime_listaCliente(seguradora.getListaClientesPJrecemCadastrados());
+		System.out.println("Condutores lidos por arquivo:");
+		seguradora.imprime_listaCondutor(seguradora.getListaCondutoresRecemCadastrados());
+		System.out.println("Frotas lidas por arquivo:");
+		seguradora.imprime_listaFrota(seguradora.getListaFrotasRecemCadastradas());
+		System.out.println("Veículos lidos por arquivo:");
+		seguradora.imprime_listaVeiculo(seguradora.getListaVeiculosRecemCadastrados());
 		menu(scan);
 		scan.close();
 	}

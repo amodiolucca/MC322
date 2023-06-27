@@ -12,8 +12,17 @@ public class Seguradora {
 	private String email ;
 	private LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida
 	private ArrayList <Seguro> listaSeguros;
+	private ArrayList<Veiculo> veiculosRecemCadastrados;
+	private ArrayList<Frota> frotasRecemCadastradas;
+	private LinkedList<Cliente> clientesPFrecemCadastrados;
+	private LinkedList<Cliente> clientesPJrecemCadastrados;
+	private ArrayList<Condutor> condutoresRecemCadastrados;
 	private static ArrayList <Seguradora> listaSeguradoras = new ArrayList<>();
 	ArquivoClientePF arquivoClientePF;
+	ArquivoClientePJ arquivoClientePJ;
+	ArquivoCondutor arquivoCondutores;
+	ArquivoFrota arquivoFrotas;
+	ArquivoVeiculo arquivoVeiculos;
  // Construtor
 	public Seguradora (String cnpj, String nome , String telefone, String endereco , String email  ) {
 		this.cnpj = cnpj;
@@ -23,6 +32,11 @@ public class Seguradora {
 		this . endereco = endereco ;
 		this.listaClientes = new LinkedList<>();
 		this.listaSeguros = new ArrayList<>();
+		this.veiculosRecemCadastrados = new ArrayList<>();
+		this.frotasRecemCadastradas = new ArrayList<>();
+		this.clientesPFrecemCadastrados = new LinkedList<>();
+		this.clientesPJrecemCadastrados = new LinkedList<>();
+		this.condutoresRecemCadastrados = new ArrayList<>();
 		Seguradora.adicionaSeguradora(this);
 		
 	}
@@ -76,6 +90,21 @@ public class Seguradora {
 	}
 	public void setListaSeguros(ArrayList<Seguro> lista) {
 		this.listaSeguros = lista;
+	}
+	public LinkedList<Cliente> getListaClientesPFrecemCadastrados(){
+		return clientesPFrecemCadastrados;
+	}
+	public LinkedList<Cliente> getListaClientesPJrecemCadastrados(){
+		return clientesPJrecemCadastrados;
+	}
+	public ArrayList<Veiculo> getListaVeiculosRecemCadastrados(){
+		return veiculosRecemCadastrados;
+	}
+	public ArrayList<Frota> getListaFrotasRecemCadastradas(){
+		return frotasRecemCadastradas;
+	}
+	public ArrayList<Condutor> getListaCondutoresRecemCadastrados(){
+		return condutoresRecemCadastrados;
 	}
 	
 	//Métodos gerais
@@ -242,6 +271,48 @@ public class Seguradora {
 		}
 		for(Sinistro s: lista) {
 			System.out.println(s);
+		}
+	}
+	
+	/**
+	 * Método que imprime uma lista de condutor de maneira organizada
+	 * @param lista
+	 */
+	public void imprime_listaCondutor(ArrayList <Condutor> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum condutor encontrado");
+			return;
+		}
+		for(Condutor c: lista) {
+			System.out.println(c);
+		}
+	}
+	
+	/**
+	 * Método que imprime uma lista de veiculo de maneira organizada
+	 * @param lista
+	 */
+	public void imprime_listaVeiculo(ArrayList <Veiculo> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum veículo encontrado");
+			return;
+		}
+		for(Veiculo v: lista) {
+			System.out.println(v);
+		}
+	}
+	
+	/**
+	 * Método que imprime uma lista de frotas de maneira organizada
+	 * @param lista
+	 */
+	public void imprime_listaFrota(ArrayList <Frota> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhuma frota encontrado");
+			return;
+		}
+		for(Frota f: lista) {
+			System.out.println(f);
 		}
 	}
 	
@@ -517,6 +588,54 @@ public class Seguradora {
 	
 	public void lerDados() {
 		
+		arquivoVeiculos = new ArquivoVeiculo(this);
+		ArrayList<Object> listaVeiculos = arquivoVeiculos.lerArquivo(".//src/com/amodio/lab6/veiculos.csv");
+		for(Object o:listaVeiculos) {
+			veiculosRecemCadastrados.add(((Veiculo) o));
+		}
+		arquivoFrotas = new ArquivoFrota(this);
+		ArrayList<Object> listaFrotas = arquivoFrotas.lerArquivo(".//src/com/amodio/lab6/frotas.csv");
+		for(Object o:listaFrotas) {
+			frotasRecemCadastradas.add(((Frota) o));
+		}
+		arquivoClientePF = new ArquivoClientePF(this);
+		ArrayList<Object> listaPF = arquivoClientePF.lerArquivo(".//src/com/amodio/lab6/clientesPF.csv");
+		for(Object o:listaPF) {
+			clientesPFrecemCadastrados.add(((Cliente) o));
+		}
+		arquivoClientePJ = new ArquivoClientePJ(this);
+		ArrayList<Object> listaPJ = arquivoClientePJ.lerArquivo(".//src/com/amodio/lab6/clientesPJ.csv");
+		for(Object o:listaPJ) {
+			clientesPJrecemCadastrados.add(((ClientePJ) o));
+		}
+		arquivoCondutores = new ArquivoCondutor(this);
+		ArrayList<Object> listaCondutores = arquivoCondutores.lerArquivo(".//src/com/amodio/lab6/condutores.csv");
+		for(Object o:listaCondutores) {
+			condutoresRecemCadastrados.add(((Condutor) o));
+		}
+		
+	}
+	
+	public Veiculo buscarVeiculoRecemCadastrado(String placa) {
+		if(veiculosRecemCadastrados != null && veiculosRecemCadastrados.size()!=0) {
+			for(Veiculo v: veiculosRecemCadastrados) {
+				if(v.getPlaca().equals(placa)) {
+					return v;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Frota buscarFrotaRecemCadastrada(String code) {
+		if(frotasRecemCadastradas != null && frotasRecemCadastradas.size()!=0) {
+			for(Frota f: frotasRecemCadastradas) {
+				if(f.getCode().equals(code)) {
+					return f;
+				}
+			}
+		}
+		return null;
 	}
 	
 	//Método toString, que faz a impressão de todos os atributos dos objetos de maneira organizada

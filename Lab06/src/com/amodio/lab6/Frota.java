@@ -14,6 +14,11 @@ public class Frota {
 		this.code = gerarCode(cliente);
 		numeroFrotas ++;
 	}
+	public Frota(String code) {
+		this.code = code;
+		this.listaVeiculos = new ArrayList<>();
+		numeroFrotas ++;
+	}
 	
 	//getters e setters
 	public String getCode() {

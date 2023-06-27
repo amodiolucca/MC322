@@ -47,6 +47,14 @@ public class ClientePJ extends Cliente {
 		return variavel_indicadora;
 	}
 	
+	public boolean cadastraFrota(Frota f) {
+		if(!listaFrota.contains(f)) {
+			listaFrota.add(f);
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Método que lista todos os veículos de um clientePJ
 	 */
