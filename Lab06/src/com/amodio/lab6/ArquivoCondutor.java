@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ArquivoCondutor {
+public class ArquivoCondutor implements I_Arquivo {
 	Seguradora seguradora;
 	
 	public ArquivoCondutor(Seguradora seguradora) {
@@ -20,7 +20,7 @@ public class ArquivoCondutor {
 			in.readLine();
 			while((linha = in.readLine())!= null) {
 				String[] dados = linha.split(separador);
-				if(!Validacao.validarCPF(dados[0])) {
+				if(!Validacao.validarCPF(dados[0])) { //verifica o cpf
 					System.out.println("CPF inválido detectado durante a leitura do arquivo de condutores. Condutor inválido: " + dados[1]);
 					continue;
 				}
@@ -28,10 +28,15 @@ public class ArquivoCondutor {
 				lista.add(condutor);
 			}
 			in.close();
+			System.out.println("Arquivo de condutor lido com sucesso");
 			return lista;
 		} catch(IOException ex) {
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	public boolean gravarDados(String path) { //Apenas para poder implementar na interface, conforme orientado na monitoria
+		return true;
 	}
 }

@@ -207,6 +207,35 @@ public abstract class Seguro {
 		}
 		return null;
 	}
+	/**
+	 * Cria uma String com os sinistros do seguro
+	 * @return str (String)
+	 */
+	public String sinistrosDoSeguro() {
+		String str = "/";
+		if(listaSinistros == null|| listaSinistros.isEmpty()) {
+			return "0 sinistros";
+		}
+		for(Sinistro s: listaSinistros) {
+			str = str + String.valueOf(s.getId()) + "/ ";
+		}
+		return str;
+	}
+	
+	/**
+	 * Cria uma String com os condutores do seguro
+	 * @return str (String)
+	 */
+	public String condutoresDoSeguro() {
+		String str = "/";
+		if(listaCondutores == null|| listaCondutores.isEmpty()) {
+			return "0 condutores";
+		}
+		for(Condutor c: listaCondutores) {
+			str = str  + String.valueOf(c.getCpf())+ "/ ";
+		}
+		return str;
+	}
 	
 	public abstract Cliente getCliente();
 	

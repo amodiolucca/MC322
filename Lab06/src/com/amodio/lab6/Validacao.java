@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
 public class Validacao {
 	private static TimeZone localHorario = TimeZone.getTimeZone("America/Sao_Paulo");
 	private static Calendar calendario = Calendar.getInstance(localHorario);
@@ -255,5 +254,10 @@ public class Validacao {
 			diferenca_anos --;
 		}
 		return diferenca_anos;
+	}
+	
+	public static String parseDateToString(Date data) {
+		String formattedDate = String.format("%1$tb %1$te, %1$tY %1$tI:%1$tM %1$Tp", data);
+		return formattedDate;
 	}
 }

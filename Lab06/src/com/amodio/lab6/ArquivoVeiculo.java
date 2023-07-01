@@ -25,6 +25,7 @@ public class ArquivoVeiculo {
 				lista.add(veiculo);
 			}
 			in.close();
+			System.out.println("Arquivo de veículo lido com sucesso");
 			return lista;
 		} catch(IOException ex) {
 			ex.printStackTrace();

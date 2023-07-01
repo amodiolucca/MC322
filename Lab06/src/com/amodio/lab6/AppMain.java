@@ -1,6 +1,7 @@
 package com.amodio.lab6;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -312,17 +313,39 @@ public class AppMain{
 		listaPJ = seguradora.listarClientes("PJ");
 		System.out.println("Clientes PJ da seguradora:");
 		seguradora.imprime_listaCliente(listaPJ);//Google não aparece mais na lista de Clientes PJ
+		
+		System.out.println("Leitura de dados:");
 		seguradora.lerDados();
 		System.out.println("Clientes PF lidos por arquivo:");
-		seguradora.imprime_listaCliente(seguradora.getListaClientesPFrecemCadastrados());
+		seguradora.imprime_lista_Object(seguradora.getListaClientesPFrecemCadastrados());
 		System.out.println("Clientes PJ lidos por arquivo:");
-		seguradora.imprime_listaCliente(seguradora.getListaClientesPJrecemCadastrados());
+		seguradora.imprime_lista_Object(seguradora.getListaClientesPJrecemCadastrados());
 		System.out.println("Condutores lidos por arquivo:");
-		seguradora.imprime_listaCondutor(seguradora.getListaCondutoresRecemCadastrados());
+		seguradora.imprime_lista_Object(seguradora.getListaCondutoresRecemCadastrados());
 		System.out.println("Frotas lidas por arquivo:");
-		seguradora.imprime_listaFrota(seguradora.getListaFrotasRecemCadastradas());
+		seguradora.imprime_lista_Object(seguradora.getListaFrotasRecemCadastradas());
 		System.out.println("Veículos lidos por arquivo:");
-		seguradora.imprime_listaVeiculo(seguradora.getListaVeiculosRecemCadastrados());
+		seguradora.imprime_lista_Object(seguradora.getListaVeiculosRecemCadastrados());
+
+		Condutor c = (Condutor) seguradora.getListaCondutoresRecemCadastrados().get(0);
+		Condutor c2 = (Condutor) seguradora.getListaCondutoresRecemCadastrados().get(2);
+		System.out.println("Gerando seguros e sinistros com alguns dados lidos...");
+		if(!segurosJoao.get(1).autorizarCondutor(c)) {
+			System.out.println("Condutor não encontrado");
+		}
+		if(!segurosSamsung.get(0).autorizarCondutor(c2)) {
+			System.out.println("Condutor não encontrado");
+		}
+		if(!segurosJoao.get(1).gerarSinistro("2023-02-25", "Rua Sobral 124", c)) {
+			System.out.println("Erro ao gerar o sinistro: Verifique se o condutor está autorizado");
+		}
+		if(!segurosSamsung.get(0).gerarSinistro("2023-02-25", "Rua Sobral 124", c2)) {
+			System.out.println("Erro ao gerar o sinistro: Verifique se o condutor está autorizado");
+		}
+		
+		seguradora.gravarDados();
+		
+		
 		menu(scan);
 		scan.close();
 	}
@@ -351,7 +374,13 @@ public class AppMain{
 					System.out.println(m.getValor() + " - " + m);
 				}
 				//scan na escolha e busca da opção correspondente
-				escolhaOp = scan.nextInt();
+				try {
+					escolhaOp = scan.nextInt();
+				} catch (InputMismatchException e) {
+	                System.out.println("Digite um número válido.");
+	                scan.nextLine(); //consome o \n que sobra da entrada
+	                continue;
+	            }
 				scan.nextLine(); //consome o \n que sobra da entrada
 				MenuOperacoes m = MenuOperacoes.busca(escolhaOp); //.busca(valor lido)
 				
@@ -451,7 +480,23 @@ public class AppMain{
 						}
 						System.out.println("A receita da seguradora é: " + seguradora.calcularReceita()); //imprime a receita na tela
 						break;
-					
+						
+					case GRAVAR_DADOS:
+						seguradora = escolherSeguradora(scan);
+						if (seguradora == null) {
+							System.out.println("Seguradora não encontrada");
+							break;
+						}
+						seguradora.gravarDados();
+						break;
+					case LER_DADOS:
+						seguradora = escolherSeguradora(scan);
+						if (seguradora == null) {
+							System.out.println("Seguradora não encontrada");
+							break;
+						}
+						seguradora.lerDados();
+						break;
 					case SAIR:
 						break menu_op; //sai do laço externo
 					

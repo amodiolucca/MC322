@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ArquivoFrota {
+public class ArquivoFrota implements I_Arquivo {
 	Seguradora seguradora;
 	
 	public ArquivoFrota(Seguradora seguradora) {
@@ -15,6 +15,7 @@ public class ArquivoFrota {
 		String linha = "";
 		String separador = ",";
 		Veiculo veiculo;
+		Object veiculoO;
 		ArrayList<Object> lista = new ArrayList<>();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(path));
@@ -23,7 +24,8 @@ public class ArquivoFrota {
 				String[] dados = linha.split(separador);
 				Frota frota = new Frota(dados[0]);
 				for(int i=0;i<3;i++) {
-					veiculo = seguradora.buscarVeiculoRecemCadastrado(dados[i+1]);
+					veiculoO = seguradora.buscarVeiculoRecemCadastrado(dados[i+1]);
+					veiculo = (Veiculo) veiculoO;
 					if(veiculo!=null) {
 						frota.addVeiculo(veiculo);
 					}
@@ -32,10 +34,15 @@ public class ArquivoFrota {
 				lista.add(frota);
 			}
 			in.close();
+			System.out.println("Arquivo de frota lido com sucesso");
 			return lista;
 		} catch(IOException ex) {
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	public boolean gravarDados(String path) { //Apenas para poder implementar na interface, conforme orientado na monitoria
+		return true;
 	}
 }

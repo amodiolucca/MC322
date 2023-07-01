@@ -12,17 +12,19 @@ public class Seguradora {
 	private String email ;
 	private LinkedList <Cliente> listaClientes; //LinkedList, pois há a inserção mais rápida
 	private ArrayList <Seguro> listaSeguros;
-	private ArrayList<Veiculo> veiculosRecemCadastrados;
-	private ArrayList<Frota> frotasRecemCadastradas;
-	private LinkedList<Cliente> clientesPFrecemCadastrados;
-	private LinkedList<Cliente> clientesPJrecemCadastrados;
-	private ArrayList<Condutor> condutoresRecemCadastrados;
+	private ArrayList<Object> veiculosRecemCadastrados;
+	private ArrayList<Object> frotasRecemCadastradas;
+	private LinkedList<Object> clientesPFrecemCadastrados;
+	private LinkedList<Object> clientesPJrecemCadastrados;
+	private ArrayList<Object> condutoresRecemCadastrados;
 	private static ArrayList <Seguradora> listaSeguradoras = new ArrayList<>();
-	ArquivoClientePF arquivoClientePF;
-	ArquivoClientePJ arquivoClientePJ;
-	ArquivoCondutor arquivoCondutores;
-	ArquivoFrota arquivoFrotas;
-	ArquivoVeiculo arquivoVeiculos;
+	private ArquivoClientePF arquivoClientePF;
+	private ArquivoClientePJ arquivoClientePJ;
+	private ArquivoCondutor arquivoCondutores;
+	private ArquivoFrota arquivoFrotas;
+	private ArquivoVeiculo arquivoVeiculos;
+	private ArquivoSinistro arquivoSinistros;
+	private ArquivoSeguros arquivoSeguros;
  // Construtor
 	public Seguradora (String cnpj, String nome , String telefone, String endereco , String email  ) {
 		this.cnpj = cnpj;
@@ -91,19 +93,19 @@ public class Seguradora {
 	public void setListaSeguros(ArrayList<Seguro> lista) {
 		this.listaSeguros = lista;
 	}
-	public LinkedList<Cliente> getListaClientesPFrecemCadastrados(){
+	public LinkedList<Object> getListaClientesPFrecemCadastrados(){
 		return clientesPFrecemCadastrados;
 	}
-	public LinkedList<Cliente> getListaClientesPJrecemCadastrados(){
+	public LinkedList<Object> getListaClientesPJrecemCadastrados(){
 		return clientesPJrecemCadastrados;
 	}
-	public ArrayList<Veiculo> getListaVeiculosRecemCadastrados(){
+	public ArrayList<Object> getListaVeiculosRecemCadastrados(){
 		return veiculosRecemCadastrados;
 	}
-	public ArrayList<Frota> getListaFrotasRecemCadastradas(){
+	public ArrayList<Object> getListaFrotasRecemCadastradas(){
 		return frotasRecemCadastradas;
 	}
-	public ArrayList<Condutor> getListaCondutoresRecemCadastrados(){
+	public ArrayList<Object> getListaCondutoresRecemCadastrados(){
 		return condutoresRecemCadastrados;
 	}
 	
@@ -313,6 +315,32 @@ public class Seguradora {
 		}
 		for(Frota f: lista) {
 			System.out.println(f);
+		}
+	}
+	/**
+	 * Imprime uma lista de objetos
+	 * @param lista
+	 */
+	public void imprime_lista_Object(ArrayList<Object> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum elemento encontrado");
+			return;
+		}
+		for(Object o: lista) {
+			System.out.println(o);
+		}
+	}
+	/**
+	 * Imprime uma lista de objetos
+	 * @param lista
+	 */
+	public void imprime_lista_Object(LinkedList<Object> lista) {
+		if(lista == null|| lista.isEmpty()) {
+			System.out.println("Nenhum elemento encontrado");
+			return;
+		}
+		for(Object o: lista) {
+			System.out.println(o);
 		}
 	}
 	
@@ -585,41 +613,44 @@ public class Seguradora {
 		}
 		return false;
 	}
-	
+	/**
+	 * Método que invoca a leitura de dados
+	 */
 	public void lerDados() {
-		
 		arquivoVeiculos = new ArquivoVeiculo(this);
-		ArrayList<Object> listaVeiculos = arquivoVeiculos.lerArquivo(".//src/com/amodio/lab6/veiculos.csv");
-		for(Object o:listaVeiculos) {
-			veiculosRecemCadastrados.add(((Veiculo) o));
-		}
+		veiculosRecemCadastrados = arquivoVeiculos.lerArquivo(".//src/com/amodio/lab6/veiculos.csv");
+		
 		arquivoFrotas = new ArquivoFrota(this);
-		ArrayList<Object> listaFrotas = arquivoFrotas.lerArquivo(".//src/com/amodio/lab6/frotas.csv");
-		for(Object o:listaFrotas) {
-			frotasRecemCadastradas.add(((Frota) o));
-		}
+		frotasRecemCadastradas = arquivoFrotas.lerArquivo(".//src/com/amodio/lab6/frotas.csv");
+		
 		arquivoClientePF = new ArquivoClientePF(this);
-		ArrayList<Object> listaPF = arquivoClientePF.lerArquivo(".//src/com/amodio/lab6/clientesPF.csv");
-		for(Object o:listaPF) {
+		ArrayList<Object> listaPF = arquivoClientePF.lerArquivo(".//src/com/amodio/lab6/clientesPF.csv"); 
+		for(Object o:listaPF) { //Passa para a LinkedList
 			clientesPFrecemCadastrados.add(((Cliente) o));
 		}
 		arquivoClientePJ = new ArquivoClientePJ(this);
 		ArrayList<Object> listaPJ = arquivoClientePJ.lerArquivo(".//src/com/amodio/lab6/clientesPJ.csv");
-		for(Object o:listaPJ) {
+		for(Object o:listaPJ) { //Passa para a LinkedList
 			clientesPJrecemCadastrados.add(((ClientePJ) o));
 		}
 		arquivoCondutores = new ArquivoCondutor(this);
-		ArrayList<Object> listaCondutores = arquivoCondutores.lerArquivo(".//src/com/amodio/lab6/condutores.csv");
-		for(Object o:listaCondutores) {
-			condutoresRecemCadastrados.add(((Condutor) o));
-		}
+		condutoresRecemCadastrados = arquivoCondutores.lerArquivo(".//src/com/amodio/lab6/condutores.csv");
 		
 	}
+	/**
+	 * Método que invoca a gravação de dados
+	 */
+	public void gravarDados() {
+		arquivoSinistros = new ArquivoSinistro(this);
+		arquivoSinistros.gravarDados(".//src/com/amodio/lab6/Sinistros.csv");
+		arquivoSeguros = new ArquivoSeguros(this);
+		arquivoSeguros.gravarDados(".//src/com/amodio/lab6/Seguros.csv");
+	}
 	
-	public Veiculo buscarVeiculoRecemCadastrado(String placa) {
+	public Object buscarVeiculoRecemCadastrado(String placa) {
 		if(veiculosRecemCadastrados != null && veiculosRecemCadastrados.size()!=0) {
-			for(Veiculo v: veiculosRecemCadastrados) {
-				if(v.getPlaca().equals(placa)) {
+			for(Object v: veiculosRecemCadastrados) {
+				if(((Veiculo)v).getPlaca().equals(placa)) {
 					return v;
 				}
 			}
@@ -627,10 +658,10 @@ public class Seguradora {
 		return null;
 	}
 	
-	public Frota buscarFrotaRecemCadastrada(String code) {
+	public Object buscarFrotaRecemCadastrada(String code) {
 		if(frotasRecemCadastradas != null && frotasRecemCadastradas.size()!=0) {
-			for(Frota f: frotasRecemCadastradas) {
-				if(f.getCode().equals(code)) {
+			for(Object f: frotasRecemCadastradas) {
+				if(((Frota)f).getCode().equals(code)) {
 					return f;
 				}
 			}
